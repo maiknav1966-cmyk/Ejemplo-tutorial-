@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tutorial académico de control de versiones, persistencia y acceso a datos en aplicaciones móviles.">
+  <meta name="theme-color" content="#f5f7fa">
+  <title>Tutorial | Desarrollo móvil</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <div class="reading-progress" id="readingProgress" role="progressbar" aria-label="Progreso de lectura" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <span id="readingProgressBar"></span>
+  </div>
+
+  <aside class="sidebar" id="sidebar" aria-label="Índice del tutorial">
+    <a class="sidebar-brand" href="#inicio">T<span aria-hidden="true">.</span> Tutorial</a>
+    <p class="sidebar-label">Índice</p>
+    <nav aria-label="Navegación principal">
+      <a href="#control-versiones" class="nav-link nav-main" aria-current="location">1. Control de versiones</a>
+      <a href="#cv-definicion" class="nav-link nav-sub">Definición</a>
+      <a href="#cv-tipos" class="nav-link nav-sub">Tipos de control</a>
+      <a href="#cv-comparativa" class="nav-link nav-sub">Comparativa</a>
+      <a href="#cv-funcionamiento" class="nav-link nav-sub">Flujo de Git</a>
+      <a href="#cv-rastreo" class="nav-link nav-sub">Gestión de cambios</a>
+      <a href="#cv-ejemplos" class="nav-link nav-sub">Ejemplos</a>
+      <a href="#cv-faq" class="nav-link nav-sub">Preguntas frecuentes</a>
+      <a href="#quiz-versiones" class="nav-link nav-sub">Mini quiz</a>
+      <a href="#persistencia" class="nav-link nav-main">2. Persistencia y datos</a>
+      <a href="#pd-definicion" class="nav-link nav-sub">Definición y características</a>
+      <a href="#pd-formas" class="nav-link nav-sub">Formas de persistencia</a>
+      <a href="#pd-tipos-datos" class="nav-link nav-sub">Tipos de datos</a>
+      <a href="#pd-acceso" class="nav-link nav-sub">Mecanismos de acceso</a>
+      <a href="#pd-autenticacion" class="nav-link nav-sub">Autenticación y API</a>
+      <a href="#pd-ejemplos" class="nav-link nav-sub">Demo y ejemplos</a>
+      <a href="#pd-faq" class="nav-link nav-sub">Preguntas frecuentes</a>
+      <a href="#quiz-persistencia" class="nav-link nav-sub">Mini quiz</a>
+    </nav>
+    <p class="sidebar-note">Guía de desarrollo móvil</p>
+  </aside>
+
+  <header class="site-header">
+    <button class="icon-button menu-button" id="menuButton" type="button" aria-label="Abrir navegación" aria-expanded="false" aria-controls="sidebar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <span class="header-title">Tutorial <span aria-hidden="true">/</span> Desarrollo móvil</span>
+    <form class="search-form" role="search" id="searchForm">
+      <label class="visually-hidden" for="searchInput">Buscar en el tutorial</label>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
+      <input id="searchInput" type="search" placeholder="Buscar en el tutorial" autocomplete="off">
+      <button class="clear-search" id="clearSearch" type="button" aria-label="Limpiar búsqueda" hidden>×</button>
+    </form>
+    <span class="search-status visually-hidden" id="searchStatus" aria-live="polite"></span>
+    <button class="theme-button" id="themeButton" type="button" aria-label="Activar modo oscuro">
+      <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.1A8.3 8.3 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"/></svg>
+      <span class="theme-label">Tema</span>
+    </button>
+  </header>
+
+  <main class="content" id="contenido">
+    <section class="hero reveal" id="inicio" aria-labelledby="page-title">
+      <p class="eyebrow">Guía académica · Aplicaciones móviles</p>
+      <h1 id="page-title">Conceptos esenciales para crear mejores aplicaciones</h1>
+      <p class="hero-summary">Comprende cómo colaborar con control de versiones y cómo guardar, proteger y consultar los datos de una aplicación móvil.</p>
+      <div class="hero-meta" aria-label="Temas del tutorial">
+        <span>01 <b>Control de versiones</b></span>
+        <span>02 <b>Persistencia y acceso a datos</b></span>
+      </div>
+    </section>
+
+    <p class="search-empty" id="searchEmpty" hidden>No encontramos coincidencias. Prueba con otra palabra.</p>
+
+    <section class="topic-section reveal" id="control-versiones" aria-labelledby="versiones-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true">01</span>
+        <div>
+          <p class="eyebrow">Tema uno</p>
+          <h2 id="versiones-title">Control de versiones</h2>
+        </div>
+      </div>
+
+      <article class="lesson" id="cv-definicion" data-searchable>
+        <h3>Definición</h3>
+        <p>El <strong>control de versiones</strong> registra los cambios realizados en los archivos de un proyecto a lo largo del tiempo. Permite consultar versiones anteriores, comparar modificaciones y conocer quién hizo un cambio y cuándo. En un equipo, ayuda a que varias personas trabajen sobre el mismo código con menos riesgo de sobrescribir el trabajo de otras.</p>
+        <p>Un <strong>repositorio</strong> es el espacio donde se conserva el proyecto y su historial. Cada registro de cambios se denomina <em>commit</em> y suele incluir autor, fecha y una descripción breve.</p>
+      </article>
+
+      <article class="lesson" id="cv-tipos" data-searchable>
+        <h3>Tipos de sistemas de control de versiones</h3>
+        <p>Los tres modelos principales se diferencian por dónde guardan el historial y cómo colaboran sus usuarios. Recorre las pestañas con las flechas del teclado.</p>
+        <div class="tabs" role="tablist" aria-label="Tipos de control de versiones">
+          <button class="tab-button is-active" id="tab-local" type="button" role="tab" aria-selected="true" aria-controls="panel-local" tabindex="0">Local</button>
+          <button class="tab-button" id="tab-centralizado" type="button" role="tab" aria-selected="false" aria-controls="panel-centralizado" tabindex="-1">Centralizado</button>
+          <button class="tab-button" id="tab-distribuido" type="button" role="tab" aria-selected="false" aria-controls="panel-distribuido" tabindex="-1">Distribuido</button>
+        </div>
+        <div class="tab-panel" id="panel-local" role="tabpanel" aria-labelledby="tab-local" tabindex="0">
+          <h4>Control local (LVCS)</h4>
+          <p>El historial se guarda en la computadora de una sola persona. Es sencillo y funciona sin red, pero depende de ese dispositivo y no facilita por sí mismo la colaboración. Algunas herramientas locales registran las diferencias entre versiones.</p>
+        </div>
+        <div class="tab-panel" id="panel-centralizado" role="tabpanel" aria-labelledby="tab-centralizado" tabindex="0" hidden>
+          <h4>Control centralizado (CVCS)</h4>
+          <p>Un servidor central conserva el historial común. Cada integrante obtiene una copia de trabajo y envía sus cambios al servidor. Simplifica la administración y los permisos, pero muchas operaciones dependen de la conexión y el servidor es un punto importante de disponibilidad. Ejemplos: Subversion (SVN) y CVS.</p>
+        </div>
+        <div class="tab-panel" id="panel-distribuido" role="tabpanel" aria-labelledby="tab-distribuido" tabindex="0" hidden>
+          <h4>Control distribuido (DVCS)</h4>
+          <p>Cada clon contiene una copia completa del historial. Se puede crear commits y ramas sin conexión y sincronizar más tarde. La colaboración es flexible y cada clon aporta una copia del historial; a cambio, requiere aprender conceptos adicionales y coordinar cómo integrar cambios. Ejemplos: Git y Mercurial.</p>
+        </div>
+      </article>
+
+      <article class="lesson" id="cv-comparativa" data-searchable>
+        <h3>Características, ventajas y desventajas</h3>
+        <div class="table-wrap" tabindex="0" aria-label="Tabla comparativa; desplázate horizontalmente si es necesario">
+          <table>
+            <caption>Comparación de los tres modelos de control de versiones</caption>
+            <thead>
+              <tr><th scope="col">Modelo</th><th scope="col">Características</th><th scope="col">Ventajas</th><th scope="col">Desventajas</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Local</th>
+                <td>Historial en una sola computadora.</td>
+                <td>Fácil de iniciar y no necesita red.</td>
+                <td>Sin colaboración integrada; la pérdida del equipo puede comprometer el historial.</td>
+              </tr>
+              <tr>
+                <th scope="row">Centralizado</th>
+                <td>Un servidor conserva la historia compartida; los clientes usan una copia de trabajo.</td>
+                <td>Permisos y estado común más simples de administrar.</td>
+                <td>Dependencia de la red y del servidor para operaciones centrales.</td>
+              </tr>
+              <tr>
+                <th scope="row">Distribuido</th>
+                <td>Cada clon conserva la historia completa del proyecto.</td>
+                <td>Trabajo sin conexión, operaciones locales rápidas y ramas flexibles.</td>
+                <td>Puede requerir más espacio y una curva de aprendizaje mayor.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="lesson" id="cv-funcionamiento" data-searchable>
+        <h3>Flujo de trabajo con Git</h3>
+        <p>Git organiza los cambios en tres áreas locales y permite sincronizarlos con un remoto opcional. El remoto es útil para compartir y respaldar, pero no es necesario para crear commits locales.</p>
+        <ol class="flow" aria-label="Flujo de cambios de Git">
+          <li><strong>Directorio de trabajo</strong><span>Editas los archivos del proyecto.</span></li>
+          <li class="flow-command"><code>git add</code><span>Preparar los cambios</span></li>
+          <li><strong>Área de preparación</strong><span>Seleccionas qué incluir en el próximo commit.</span></li>
+          <li class="flow-command"><code>git commit</code><span>Guardar una versión</span></li>
+          <li><strong>Repositorio local</strong><span>Se incorpora el commit al historial local.</span></li>
+          <li class="flow-command"><code>git push</code><span>Sincronizar con un remoto</span></li>
+          <li><strong>Repositorio remoto</strong><span>Historial compartido alojado en un servidor.</span></li>
+        </ol>
+        <dl class="term-list">
+          <dt>Rama (branch)</dt><dd>Línea de trabajo independiente para desarrollar una función o corrección.</dd>
+          <dt>Merge</dt><dd>Integración de los cambios de una rama en otra; si hay conflictos, deben resolverse.</dd>
+          <dt>Pull</dt><dd>Obtiene cambios del remoto e integra los cambios según el comando empleado y la configuración.</dd>
+        </dl>
+      </article>
+
+      <article class="lesson" id="cv-rastreo" data-searchable>
+        <h3>Rastreo y gestión de cambios</h3>
+        <ul class="feature-list">
+          <li><code>git log</code> consulta commits, autores y mensajes.</li>
+          <li><code>git diff</code> compara cambios entre archivos, commits o áreas de trabajo.</li>
+          <li><code>git blame</code> muestra el commit asociado a cada línea de un archivo.</li>
+          <li>Las <strong>ramas</strong> aíslan el trabajo y los <strong>tags</strong> identifican puntos importantes, como una versión publicada.</li>
+          <li>Una <strong>pull request</strong> (o solicitud de integración) permite revisar y conversar sobre cambios antes de incorporarlos; es una función de plataformas de alojamiento, no un comando propio de Git.</li>
+        </ul>
+        <details class="faq-item">
+          <summary>¿Es lo mismo Git que una plataforma de alojamiento?</summary>
+          <p>No. Git es el sistema distribuido que gestiona versiones. Una plataforma de alojamiento puede guardar repositorios Git y ofrecer funciones adicionales, como revisión de cambios y seguimiento de tareas.</p>
+        </details>
+      </article>
+
+      <article class="lesson" id="cv-ejemplos" data-searchable>
+        <h3>Ejemplos prácticos con Git</h3>
+        <p>Este ciclo inicia un repositorio, prepara un cambio, lo guarda y consulta el historial. Para clonar un proyecto existente, reemplaza el marcador por la dirección que te proporcione tu equipo.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Terminal · ciclo básico</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code># Configurar identidad una sola vez en el equipo
+git config --global user.name "Tu Nombre"
+git config --global user.email "tu-correo"
+
+# Crear un repositorio o clonar uno existente
+git init
+git clone &lt;URL-del-repositorio&gt;
+
+# Revisar, preparar y guardar cambios
+git status
+git add archivo.js
+git commit -m "Agrega una función"
+
+# Crear y cambiar de rama
+git switch -c nueva-funcion
+git switch main
+git merge nueva-funcion
+
+# Consultar historial y diferencias
+git log --oneline
+git diff</code></pre>
+        </div>
+        <p>Cuando se configura un remoto y existe permiso para publicar, <code>git push</code> envía los commits locales. No se debe ejecutar en un remoto desconocido o sin revisar su destino.</p>
+      </article>
+
+      <article class="lesson" id="cv-faq" data-searchable>
+        <h3>Preguntas frecuentes</h3>
+        <details class="faq-item">
+          <summary>¿Cada cuánto conviene crear un commit?</summary>
+          <p>Cuando existe un conjunto pequeño y coherente de cambios que se puede describir con claridad. Los commits frecuentes y enfocados facilitan la revisión y la búsqueda de errores.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Un commit reemplaza una copia de seguridad?</summary>
+          <p>No completamente. Un commit protege el historial local, pero una falla del dispositivo aún podría perderlo. Sincronizar con un remoto de confianza y mantener respaldos sigue siendo recomendable.</p>
+        </details>
+      </article>
+
+      <article class="lesson quiz-card" id="quiz-versiones">
+        <h3>Mini quiz: control de versiones</h3>
+        <p>Selecciona una respuesta por pregunta y revisa tu puntaje.</p>
+        <form class="quiz-form" data-quiz>
+          <fieldset data-answer="b">
+            <legend>1. ¿Qué área reúne los cambios seleccionados antes del commit?</legend>
+            <label><input type="radio" name="q1" value="a" required> El directorio remoto</label>
+            <label><input type="radio" name="q1" value="b"> El área de preparación (staging)</label>
+            <label><input type="radio" name="q1" value="c"> La configuración global</label>
+          </fieldset>
+          <fieldset data-answer="a">
+            <legend>2. ¿Qué contiene normalmente un clon distribuido?</legend>
+            <label><input type="radio" name="q2" value="a" required> Una copia completa del historial</label>
+            <label><input type="radio" name="q2" value="b"> Solo el último archivo publicado</label>
+            <label><input type="radio" name="q2" value="c"> Únicamente los cambios sin confirmar</label>
+          </fieldset>
+          <fieldset data-answer="c">
+            <legend>3. ¿Para qué se usa principalmente <code>git diff</code>?</legend>
+            <label><input type="radio" name="q3" value="a" required> Crear un repositorio remoto</label>
+            <label><input type="radio" name="q3" value="b"> Cambiar el nombre de una rama</label>
+            <label><input type="radio" name="q3" value="c"> Comparar modificaciones</label>
+          </fieldset>
+          <button class="primary-button" type="submit">Revisar respuestas</button>
+          <p class="quiz-result" aria-live="polite"></p>
+        </form>
+      </article>
+    </section>
+
+    <section class="topic-section reveal" id="persistencia" aria-labelledby="persistencia-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true">02</span>
+        <div>
+          <p class="eyebrow">Tema dos</p>
+          <h2 id="persistencia-title">Persistencia y acceso a datos</h2>
+        </div>
+      </div>
+
+      <article class="lesson" id="pd-definicion" data-searchable>
+        <h3>Definición y características</h3>
+        <p>La <strong>persistencia</strong> permite conservar información después de que una aplicación se cierra. El <strong>acceso a datos</strong> comprende las operaciones para guardar, consultar, modificar y eliminar esa información. A diferencia de la memoria RAM, el almacenamiento persistente conserva los datos más allá de la ejecución actual.</p>
+        <div class="card-grid">
+          <section class="info-card"><h4>Durabilidad e integridad</h4><p>Los datos deben sobrevivir al cierre y mantenerse completos y coherentes, incluso ante operaciones concurrentes o fallos.</p></section>
+          <section class="info-card"><h4>Disponibilidad y seguridad</h4><p>La información debe poder consultarse cuando se requiere y protegerse con permisos y controles apropiados.</p></section>
+          <section class="info-card"><h4>Rendimiento y sincronización</h4><p>El acceso debe ajustarse a los recursos móviles; los cambios locales y remotos pueden sincronizarse cuando hay conexión.</p></section>
+        </div>
+      </article>
+
+      <article class="lesson" id="pd-formas" data-searchable>
+        <h3>Formas de persistencia en dispositivos móviles</h3>
+        <div class="card-grid">
+          <section class="info-card"><h4>Archivos y preferencias</h4><p>Guardan datos como texto, JSON, XML, imágenes o documentos. El almacenamiento clave-valor (por ejemplo, preferencias de plataforma) es apropiado para opciones simples, como idioma o tema; no para secretos sin protección ni grandes conjuntos relacionados.</p><p><strong>Útil para:</strong> preferencias, caché y documentos.</p></section>
+          <section class="info-card"><h4>Bases de datos locales</h4><p>Organizan datos estructurados en el dispositivo y permiten consultas y transacciones. SQLite es una base de datos relacional integrada en muchas plataformas; capas como Room proporcionan herramientas adicionales sobre SQLite.</p><p><strong>Útil para:</strong> tareas, historial y funciones sin conexión.</p></section>
+          <section class="info-card"><h4>Servicios y datos remotos</h4><p>La app se comunica por una API con un servidor que autentica solicitudes y administra los datos compartidos. REST suele transportar recursos como JSON mediante HTTP; GraphQL permite solicitar campos específicos. Firebase ofrece varios servicios administrados, no un único tipo de base de datos.</p><p><strong>Útil para:</strong> datos compartidos y sincronización entre dispositivos.</p></section>
+        </div>
+        <details class="faq-item">
+          <summary>¿Qué opción funciona sin conexión?</summary>
+          <p>Los archivos y bases de datos locales permiten trabajar sin red. Una aplicación también puede combinar almacenamiento local y remoto y sincronizar cambios más tarde, siempre que defina cómo resolver conflictos y conservar la consistencia.</p>
+        </details>
+      </article>
+
+      <article class="lesson" id="pd-tipos-datos" data-searchable>
+        <h3>Tipos de datos según la forma de persistencia</h3>
+        <div class="table-wrap" tabindex="0" aria-label="Tabla de tipos de datos; desplázate horizontalmente si es necesario">
+          <table>
+            <caption>Ejemplos de información y almacenamiento adecuado</caption>
+            <thead><tr><th scope="col">Forma</th><th scope="col">Datos habituales</th><th scope="col">Ejemplo</th><th scope="col">Consideración</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Clave-valor</th><td>Texto breve, números y valores booleanos.</td><td>Idioma seleccionado o preferencia de tema.</td><td>No es un almacén seguro para credenciales.</td></tr>
+              <tr><th scope="row">Archivos</th><td>Texto, JSON, XML, imágenes, audio, video y documentos.</td><td>Documento descargado o archivo de configuración.</td><td>Valida formato, tamaño y permisos.</td></tr>
+              <tr><th scope="row">Base local</th><td>Registros estructurados, relaciones, fechas, números y blobs.</td><td>Tareas o productos que deben consultarse localmente.</td><td>Usa transacciones y consultas parametrizadas.</td></tr>
+              <tr><th scope="row">Servicio remoto</th><td>Recursos sincronizados, perfiles y datos compartidos.</td><td>Publicaciones consultadas desde varios dispositivos.</td><td>Requiere conexión, autenticación y manejo de errores.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="lesson" id="pd-acceso" data-searchable>
+        <h3>Mecanismos de acceso a medios persistentes</h3>
+        <h4>Bibliotecas de clases</h4>
+        <p>Las APIs de cada plataforma abstraen operaciones del sistema de archivos y preferencias. En Android se utilizan APIs de archivos y DataStore o preferencias; iOS ofrece FileManager y UserDefaults. Las credenciales y tokens deben guardarse en almacenes seguros del sistema, no en preferencias ordinarias.</p>
+        <h4>Clases de SQLite</h4>
+        <p>SQLite permite ejecutar consultas SQL en una base local. Usa parámetros en vez de concatenar texto para evitar errores de formato y ataques de inyección.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Ejemplo · SQL parametrizado</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>-- Crear una tabla sencilla
+CREATE TABLE IF NOT EXISTS mascotas (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  especie TEXT
+);
+
+-- Insertar valores con parámetros enlazados desde la API
+INSERT INTO mascotas (nombre, especie)
+VALUES (?, ?);
+
+-- Consultar los registros
+SELECT id, nombre, especie FROM mascotas;</code></pre>
+        </div>
+        <h4>Mapeo relacional de objetos (ORM)</h4>
+        <p>Un ORM conecta entidades del código con tablas de una base relacional. Reduce parte del SQL repetitivo y puede ofrecer migraciones y comprobación de tipos, pero no elimina la necesidad de entender consultas, transacciones y el diseño de datos. Room es una capa de persistencia de Android basada en SQLite.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Ejemplo conceptual · Kotlin y Room</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>@Entity(tableName = "mascotas")
+data class Mascota(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val nombre: String,
+    val especie: String
+)
+
+@Dao
+interface MascotaDao {
+    @Insert
+    suspend fun insertar(mascota: Mascota)
+
+    @Query("SELECT * FROM mascotas")
+    suspend fun obtenerTodas(): List&lt;Mascota&gt;
+}</code></pre>
+        </div>
+      </article>
+
+      <article class="lesson" id="pd-autenticacion" data-searchable>
+        <h3>Autenticación y consumo de servicios web</h3>
+        <p>La autenticación comprueba quién realiza una solicitud. Un flujo habitual con una API usa HTTPS y un token de acceso de duración limitada. El servidor valida las credenciales; la app protege el token en el almacén seguro del sistema y lo envía en solicitudes autorizadas. Una respuesta 401 indica que la solicitud no está autenticada o que la credencial ya no es válida.</p>
+        <ol class="numbered-steps">
+          <li>La persona introduce sus credenciales en la aplicación.</li>
+          <li>La app las envía al endpoint de inicio de sesión usando HTTPS.</li>
+          <li>El servidor valida las credenciales y, si son correctas, emite un token.</li>
+          <li>La app guarda el token de forma segura; no guarda la contraseña.</li>
+          <li>Las solicitudes protegidas incluyen el token en el encabezado <code>Authorization</code>.</li>
+          <li>El servidor valida el token y devuelve los datos o un error adecuado.</li>
+          <li>La app maneja expiración, errores de red y estados de carga sin exponer secretos.</li>
+        </ol>
+        <p>El siguiente fragmento es una plantilla ilustrativa: sustituye las rutas relativas por las rutas de una API de confianza. No realiza solicitudes al abrir este tutorial.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Ejemplo · Fetch y token</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>async function iniciarSesion(correo, contrasena) {
+  const respuesta = await fetch('/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ correo, contrasena })
+  });
+
+  if (!respuesta.ok) {
+    throw new Error('No se pudo iniciar sesión.');
+  }
+
+  const datos = await respuesta.json();
+  return datos.token;
+}
+
+async function obtenerDatos(token) {
+  const respuesta = await fetch('/datos', {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  if (!respuesta.ok) {
+    throw new Error('No se pudieron cargar los datos.');
+  }
+
+  return respuesta.json();
+}</code></pre>
+        </div>
+        <details class="faq-item">
+          <summary>¿Puedo guardar el token en localStorage?</summary>
+          <p>Para aplicaciones móviles nativas, utiliza el almacén seguro de la plataforma. En web, localStorage no es adecuado para secretos de autenticación frente a ataques de script; la estrategia debe elegirse según el modelo de seguridad de la aplicación.</p>
+        </details>
+      </article>
+
+      <article class="lesson" id="pd-ejemplos" data-searchable>
+        <h3>Demo interactiva: persistencia con localStorage</h3>
+        <p>Escribe una nota y guárdala. La demo conserva el texto en el navegador para mostrar cómo funciona el almacenamiento clave-valor. No introduzcas contraseñas ni información sensible.</p>
+        <form class="note-demo" id="noteForm">
+          <label for="noteInput">Nota de ejemplo</label>
+          <input id="noteInput" name="nota" type="text" maxlength="160" placeholder="Escribe una nota breve">
+          <div class="button-row">
+            <button class="primary-button" type="submit">Guardar nota</button>
+            <button class="secondary-button" id="deleteNote" type="button">Borrar nota</button>
+          </div>
+          <p class="demo-message" id="noteMessage" aria-live="polite">La nota guardada aparecerá aquí.</p>
+        </form>
+        <h4>Casos de uso</h4>
+        <ul class="feature-list">
+          <li>Preferencias de tema e idioma: almacenamiento simple de clave-valor.</li>
+          <li>Lista de tareas que debe consultarse sin conexión: base de datos local.</li>
+          <li>Fotografías o documentos: archivos con permisos y límites de almacenamiento apropiados.</li>
+          <li>Publicaciones compartidas entre dispositivos: API y almacenamiento remoto con autenticación.</li>
+        </ul>
+      </article>
+
+      <article class="lesson" id="pd-faq" data-searchable>
+        <h3>Preguntas frecuentes</h3>
+        <details class="faq-item">
+          <summary>¿Qué datos deberían guardarse localmente?</summary>
+          <p>Los necesarios para que la experiencia sea rápida o funcione sin conexión, con una política de retención clara. Evita almacenar datos personales innecesarios y protege la información sensible.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Qué hacer cuando los datos locales y remotos difieren?</summary>
+          <p>Define una estrategia de sincronización explícita: por ejemplo, resolver conflictos por versión, registrar operaciones pendientes o pedir decisión a la persona usuaria. No existe una regla única adecuada para todas las aplicaciones.</p>
+        </details>
+      </article>
+
+      <article class="lesson quiz-card" id="quiz-persistencia">
+        <h3>Mini quiz: persistencia y acceso a datos</h3>
+        <p>Selecciona una respuesta por pregunta y revisa tu puntaje.</p>
+        <form class="quiz-form" data-quiz>
+          <fieldset data-answer="a">
+            <legend>1. ¿Qué opción suele ser adecuada para preferencias simples?</legend>
+            <label><input type="radio" name="p1" value="a" required> Almacenamiento clave-valor</label>
+            <label><input type="radio" name="p1" value="b"> Una tabla remota sin autenticación</label>
+            <label><input type="radio" name="p1" value="c"> Una contraseña en un archivo de texto</label>
+          </fieldset>
+          <fieldset data-answer="c">
+            <legend>2. ¿Qué práctica ayuda a evitar inyección SQL?</legend>
+            <label><input type="radio" name="p2" value="a" required> Concatenar la entrada del usuario en la consulta</label>
+            <label><input type="radio" name="p2" value="b"> Desactivar las restricciones de la tabla</label>
+            <label><input type="radio" name="p2" value="c"> Enlazar valores mediante parámetros</label>
+          </fieldset>
+          <fieldset data-answer="b">
+            <legend>3. ¿Dónde debería guardar una app móvil un token sensible?</legend>
+            <label><input type="radio" name="p3" value="a" required> En una preferencia pública</label>
+            <label><input type="radio" name="p3" value="b"> En el almacén seguro de la plataforma</label>
+            <label><input type="radio" name="p3" value="c"> En un comentario del código</label>
+          </fieldset>
+          <button class="primary-button" type="submit">Revisar respuestas</button>
+          <p class="quiz-result" aria-live="polite"></p>
+        </form>
+      </article>
+    </section>
+
+    <footer class="site-footer">
+      <p><strong>Tutorial de desarrollo móvil</strong> · Actividad: 12/11/2026</p>
+      <p>Nombre del alumno: <span class="student-placeholder">____________________________</span></p>
+      <p class="sustainability-note"><strong>Sitio ligero y sostenible.</strong> Usa solo HTML, CSS y JavaScript local, fuentes del sistema y recursos vectoriales simples; no carga trackers, videos ni bibliotecas externas.</p>
+      <a class="back-to-top" href="#inicio">Volver arriba ↑</a>
+    </footer>
+  </main>
+
+  <button class="back-to-top floating-top" id="backToTop" type="button" aria-label="Volver arriba" hidden>↑</button>
+  <div class="menu-scrim" id="menuScrim" hidden></div>
+</body>
+</html>
