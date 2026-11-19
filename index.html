@@ -1,0 +1,1217 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tutorial académico de siete temas de desarrollo móvil: control de versiones, persistencia, sensores, multimedia, servicios, toolkits, depuración y seguridad.">
+  <meta name="theme-color" content="#f5f8ff">
+  <title>Tutorial | Desarrollo móvil</title>
+  <script>
+    /* Aplica tema y modo eco antes de pintar para evitar parpadeos. */
+    (function () {
+      try {
+        var r = document.documentElement;
+        var t = localStorage.getItem("tutorial-tema");
+        var e = localStorage.getItem("tutorial-eco-visual");
+        var oscuro = t === "dark" || (t !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+        r.dataset.theme = oscuro ? "dark" : "light";
+        if (e === "on") r.classList.add("eco");
+      } catch (x) {
+        document.documentElement.dataset.storageUnavailable = "true";
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="css/estilos.css">
+  <script src="js/script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <div class="reading-progress" id="readingProgress" role="progressbar" aria-label="Progreso de lectura" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <span id="readingProgressBar"></span>
+  </div>
+  <div class="visually-hidden" id="liveStatus" role="status" aria-live="polite"></div>
+
+  <aside class="sidebar" id="sidebar" aria-label="Índice del tutorial">
+    <a class="sidebar-brand" href="#inicio">T<span aria-hidden="true">.</span> Tutorial</a>
+    <p class="sidebar-label">Índice</p>
+    <nav aria-label="Navegación principal">
+      <a href="#control-versiones" class="nav-link nav-main" aria-current="location">1. Control de versiones</a>
+      <a href="#cv-definicion" class="nav-link nav-sub">Definición</a>
+      <a href="#cv-tipos" class="nav-link nav-sub">Tipos de control</a>
+      <a href="#cv-comparativa" class="nav-link nav-sub">Comparativa</a>
+      <a href="#cv-funcionamiento" class="nav-link nav-sub">Flujo de Git</a>
+      <a href="#cv-rastreo" class="nav-link nav-sub">Gestión de cambios</a>
+      <a href="#cv-ejemplos" class="nav-link nav-sub">Ejemplos</a>
+      <a href="#cv-video" class="nav-link nav-sub">Video: Git</a>
+      <a href="#cv-faq" class="nav-link nav-sub">Preguntas frecuentes</a>
+      <a href="#quiz-versiones" class="nav-link nav-sub">Mini quiz</a>
+      <a href="#persistencia" class="nav-link nav-main">2. Persistencia y datos</a>
+      <a href="#pd-definicion" class="nav-link nav-sub">Definición y características</a>
+      <a href="#pd-formas" class="nav-link nav-sub">Formas de persistencia</a>
+      <a href="#pd-tipos-datos" class="nav-link nav-sub">Tipos de datos</a>
+      <a href="#pd-acceso" class="nav-link nav-sub">Mecanismos de acceso</a>
+      <a href="#pd-autenticacion" class="nav-link nav-sub">Autenticación y API</a>
+      <a href="#pd-ejemplos" class="nav-link nav-sub">Demo y ejemplos</a>
+      <a href="#pd-video" class="nav-link nav-sub">Recursos de datos</a>
+      <a href="#pd-faq" class="nav-link nav-sub">Preguntas frecuentes</a>
+      <a href="#quiz-persistencia" class="nav-link nav-sub">Mini quiz</a>
+      <a href="#sensores" class="nav-link nav-main">3. Gestión de sensores</a>
+      <a href="#sen-definicion" class="nav-link nav-sub">Definición y tipos</a>
+      <a href="#sen-gestion" class="nav-link nav-sub">Habilitación y procesamiento</a>
+      <a href="#sen-ejemplo" class="nav-link nav-sub">Ejemplo móvil</a>
+      <a href="#quiz-sensores" class="nav-link nav-sub">Mini quiz</a>
+      <a href="#multimedia" class="nav-link nav-main">4. Recursos multimedia</a>
+      <a href="#mm-definicion" class="nav-link nav-sub">Definición y tipos</a>
+      <a href="#mm-proyecto" class="nav-link nav-sub">Recursos del proyecto</a>
+      <a href="#mm-componentes" class="nav-link nav-sub">Componentes y ejemplo</a>
+      <a href="#quiz-multimedia" class="nav-link nav-sub">Mini quiz</a>
+      <a href="#servicios" class="nav-link nav-main">5. Servicios y notificaciones</a>
+      <a href="#sn-conceptos" class="nav-link nav-sub">Servicios y segundo plano</a>
+      <a href="#sn-proveedores" class="nav-link nav-sub">Proveedores de contenido</a>
+      <a href="#sn-notificaciones" class="nav-link nav-sub">Notificaciones</a>
+      <a href="#sn-nube" class="nav-link nav-sub">Cómputo en la nube</a>
+      <a href="#quiz-servicios" class="nav-link nav-sub">Mini quiz</a>
+      <a href="#toolkits" class="nav-link nav-main">6. Librerías y toolkits</a>
+      <a href="#tk-definiciones" class="nav-link nav-sub">Librería y toolkit</a>
+      <a href="#tk-librerias" class="nav-link nav-sub">Librerías móviles</a>
+      <a href="#tk-comparativa" class="nav-link nav-sub">Comparación de toolkits</a>
+      <a href="#quiz-toolkits" class="nav-link nav-sub">Mini quiz</a>
+      <a href="#seguridad" class="nav-link nav-main">7. Depuración y seguridad</a>
+      <a href="#ds-conceptos" class="nav-link nav-sub">Conceptos e importancia</a>
+      <a href="#ds-herramientas" class="nav-link nav-sub">Herramientas de depuración</a>
+      <a href="#ds-practicas" class="nav-link nav-sub">Prácticas y ejemplo</a>
+      <a href="#quiz-seguridad" class="nav-link nav-sub">Mini quiz</a>
+      <a href="#tutoriales-muestra" class="nav-link nav-main">Tutoriales de muestra</a>
+      <a href="#glosario" class="nav-link nav-sub">Glosario</a>
+      <a href="#recursos" class="nav-link nav-sub">Recursos y referencias</a>
+      <a href="#cierre" class="nav-link nav-sub">Cierre de aprendizaje</a>
+    </nav>
+    <p class="sidebar-note">Guía de desarrollo móvil</p>
+  </aside>
+
+  <header class="site-header">
+    <button class="icon-button menu-button" id="menuButton" type="button" aria-label="Abrir navegación" aria-expanded="false" aria-controls="sidebar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <span class="header-title">Tutorial <span aria-hidden="true">/</span> Desarrollo móvil</span>
+    <form class="search-form" role="search" id="searchForm">
+      <label class="visually-hidden" for="searchInput">Buscar en el tutorial</label>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
+      <input id="searchInput" type="search" placeholder="Buscar en el tutorial" autocomplete="off">
+      <button class="clear-search" id="clearSearch" type="button" aria-label="Limpiar búsqueda" hidden>×</button>
+    </form>
+    <span class="search-status visually-hidden" id="searchStatus" aria-live="polite"></span>
+
+    <div class="tools" role="group" aria-label="Preferencias de visualización">
+      <div class="segmented" role="group" aria-label="Tema de color">
+        <button type="button" data-theme-choice="light" aria-pressed="false"><span aria-hidden="true">☀</span><span class="tool-label">Claro</span></button>
+        <button type="button" data-theme-choice="dark" aria-pressed="false"><span aria-hidden="true">☾</span><span class="tool-label">Oscuro</span></button>
+        <button type="button" data-theme-choice="auto" aria-pressed="false"><span aria-hidden="true">◐</span><span class="tool-label">Auto</span></button>
+      </div>
+      <button class="tool-btn" id="ecoButton" type="button" aria-pressed="false" title="Quita degradados, animaciones y sombras para gastar menos energía">
+        <span aria-hidden="true">🌱</span><span class="tool-label">Modo eco</span>
+      </button>
+      <div class="segmented" role="group" aria-label="Tamaño del texto">
+        <button type="button" id="textDown" aria-label="Reducir tamaño del texto" aria-disabled="false">A−</button>
+        <button type="button" id="textUp" aria-label="Aumentar tamaño del texto" aria-disabled="false">A+</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content" id="contenido">
+    <section class="hero reveal" id="inicio" aria-labelledby="page-title">
+      <p class="eyebrow">Guía académica · Aplicaciones móviles</p>
+      <h1 id="page-title">Conceptos esenciales para crear mejores aplicaciones</h1>
+      <p class="hero-summary">Recorre siete temas fundamentales para planear, construir, probar y proteger aplicaciones móviles, desde el historial del código hasta la depuración.</p>
+      <div class="hero-actions">
+        <a class="cta cta-primary" href="#cv-definicion">Comenzar el tutorial</a>
+        <a class="cta cta-secondary" href="#control-versiones">Explorar los siete temas</a>
+        <a class="cta cta-secondary" href="#cv-video">Ver videos</a>
+        <a class="cta cta-secondary" id="continueLink" href="#inicio" hidden>Continuar donde lo dejaste</a>
+      </div>
+      <div class="hero-meta" aria-label="Temas del tutorial">
+        <span>01–02 <b>Código y persistencia de datos</b></span>
+        <span>03–05 <b>Sensores, multimedia y servicios</b></span>
+        <span>06–07 <b>Toolkits, depuración y seguridad</b></span>
+      </div>
+    </section>
+
+    <section class="learning-intro reveal" id="objetivos" aria-labelledby="objetivos-title">
+      <div class="section-title">
+        <p class="eyebrow">Ruta de aprendizaje</p>
+        <h2 id="objetivos-title">¿Qué aprenderás?</h2>
+        <p>Siete módulos conectan las decisiones de almacenamiento, capacidades del dispositivo, arquitectura, herramientas y calidad de una aplicación móvil.</p>
+      </div>
+      <div class="card-grid">
+        <article class="info-card objective-card">
+          <span class="objective-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>
+          </span>
+          <h3>Control de versiones</h3>
+          <ul>
+            <li>Distinguir modelos locales, centralizados y distribuidos.</li>
+            <li>Seguir el flujo de Git y revisar cambios con comandos comunes.</li>
+            <li>Usar ramas, etiquetas y revisiones para colaborar.</li>
+          </ul>
+        </article>
+        <article class="info-card objective-card">
+          <span class="objective-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v7c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12v7c0 1.7 3.6 3 8 3s8-1.3 8-3v-7"/></svg>
+          </span>
+          <h3>Persistencia y acceso a datos</h3>
+          <ul>
+            <li>Elegir entre archivos, almacenamiento local y servicios web.</li>
+            <li>Reconocer el papel de SQLite, ORM y APIs.</li>
+            <li>Explicar autenticación y almacenamiento seguro de tokens.</li>
+          </ul>
+        </article>
+        <article class="info-card objective-card"><h3>03 · Gestión de sensores</h3><p>Identificar sensores del dispositivo y explicar su activación, lectura y procesamiento responsable.</p></article>
+        <article class="info-card objective-card"><h3>04 · Recursos multimedia</h3><p>Reconocer formatos, ubicaciones de recursos y componentes para mostrar o reproducir medios.</p></article>
+        <article class="info-card objective-card"><h3>05 · Servicios y notificaciones</h3><p>Distinguir trabajo en segundo plano, proveedores de contenido, notificaciones y servicios de nube.</p></article>
+        <article class="info-card objective-card"><h3>06 · Librerías y toolkits</h3><p>Comparar código reutilizable con conjuntos de herramientas y elegir opciones para cada plataforma.</p></article>
+        <article class="info-card objective-card"><h3>07 · Depuración y seguridad</h3><p>Usar herramientas del entorno móvil y aplicar prácticas de diagnóstico y protección desde el desarrollo.</p></article>
+      </div>
+      <p class="resume-note" id="resumeNote" aria-live="polite"></p>
+    </section>
+
+    <div class="search-results" id="searchResults" aria-label="Resultados de búsqueda" hidden></div>
+    <div class="filters" role="group" aria-label="Filtrar contenido">
+      <p class="filters-label" id="filtersLabel">Mostrar:</p>
+      <button class="chip" type="button" data-filter="all" aria-pressed="true">Todo</button>
+      <button class="chip" type="button" data-filter="versiones" aria-pressed="false">Control de versiones</button>
+      <button class="chip" type="button" data-filter="datos" aria-pressed="false">Persistencia y datos</button>
+      <button class="chip" type="button" data-filter="sensores" aria-pressed="false">Sensores</button>
+      <button class="chip" type="button" data-filter="multimedia" aria-pressed="false">Multimedia</button>
+      <button class="chip" type="button" data-filter="servicios" aria-pressed="false">Servicios</button>
+      <button class="chip" type="button" data-filter="toolkits" aria-pressed="false">Librerías y toolkits</button>
+      <button class="chip" type="button" data-filter="seguridad" aria-pressed="false">Depuración y seguridad</button>
+      <button class="chip" type="button" data-filter="videos" aria-pressed="false">Solo videos</button>
+    </div>
+
+    <p class="search-empty" id="searchEmpty" hidden>No encontramos coincidencias. Prueba con otra palabra o cambia el filtro.</p>
+
+    <section class="topic-section reveal" id="control-versiones" data-topic="versiones" aria-labelledby="versiones-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>01</span><svg viewBox="0 0 24 24"><path d="M7 4v7a5 5 0 0 0 5 5h5m-4-4 4 4-4 4M7 4h.01"/></svg></span>
+        <div>
+          <p class="eyebrow">Tema uno</p>
+          <h2 id="versiones-title">Control de versiones</h2>
+        </div>
+      </div>
+      <div class="learning-goals">
+        <strong>Al terminar este módulo podrás:</strong>
+        <span>comparar modelos de control, describir el flujo de Git y elegir comandos de consulta y colaboración.</span>
+      </div>
+
+      <article class="lesson" id="cv-definicion" data-searchable>
+        <h3>Definición</h3>
+        <p>El <strong>control de versiones</strong> registra los cambios realizados en los archivos de un proyecto a lo largo del tiempo. Permite consultar versiones anteriores, comparar modificaciones y conocer quién hizo un cambio y cuándo. En un equipo, ayuda a que varias personas trabajen sobre el mismo código con menos riesgo de sobrescribir el trabajo de otras.</p>
+        <p>Un <strong>repositorio</strong> es el espacio donde se conserva el proyecto y su historial. Cada registro de cambios se denomina <em>commit</em> y suele incluir autor, fecha y una descripción breve.</p>
+      </article>
+
+      <article class="lesson" id="cv-tipos" data-searchable>
+        <h3>Tipos de sistemas de control de versiones</h3>
+        <p>Los tres modelos principales se diferencian por dónde guardan el historial y cómo colaboran sus usuarios. Recorre las pestañas con las flechas del teclado.</p>
+        <div class="tabs" role="tablist" aria-label="Tipos de control de versiones">
+          <button class="tab-button is-active" id="tab-local" type="button" role="tab" aria-selected="true" aria-controls="panel-local" tabindex="0">Local</button>
+          <button class="tab-button" id="tab-centralizado" type="button" role="tab" aria-selected="false" aria-controls="panel-centralizado" tabindex="-1">Centralizado</button>
+          <button class="tab-button" id="tab-distribuido" type="button" role="tab" aria-selected="false" aria-controls="panel-distribuido" tabindex="-1">Distribuido</button>
+        </div>
+        <div class="tab-panel" id="panel-local" role="tabpanel" aria-labelledby="tab-local" tabindex="0">
+          <h4>Control local (LVCS)</h4>
+          <p>El historial se guarda en la computadora de una sola persona. Es sencillo y funciona sin red, pero depende de ese dispositivo y no facilita por sí mismo la colaboración. Algunas herramientas locales registran las diferencias entre versiones.</p>
+        </div>
+        <div class="tab-panel" id="panel-centralizado" role="tabpanel" aria-labelledby="tab-centralizado" tabindex="0" hidden>
+          <h4>Control centralizado (CVCS)</h4>
+          <p>Un servidor central conserva el historial común. Cada integrante obtiene una copia de trabajo y envía sus cambios al servidor. Simplifica la administración y los permisos, pero muchas operaciones dependen de la conexión y el servidor es un punto importante de disponibilidad. Ejemplos: Subversion (SVN) y CVS.</p>
+        </div>
+        <div class="tab-panel" id="panel-distribuido" role="tabpanel" aria-labelledby="tab-distribuido" tabindex="0" hidden>
+          <h4>Control distribuido (DVCS)</h4>
+          <p>Cada clon contiene una copia completa del historial. Se puede crear commits y ramas sin conexión y sincronizar más tarde. La colaboración es flexible y cada clon aporta una copia del historial; a cambio, requiere aprender conceptos adicionales y coordinar cómo integrar cambios. Ejemplos: Git y Mercurial.</p>
+        </div>
+      </article>
+
+      <article class="lesson" id="cv-comparativa" data-searchable>
+        <h3>Características, ventajas y desventajas</h3>
+        <div class="table-wrap" tabindex="0" aria-label="Tabla comparativa; desplázate horizontalmente si es necesario">
+          <table>
+            <caption>Comparación de los tres modelos de control de versiones</caption>
+            <thead>
+              <tr><th scope="col">Modelo</th><th scope="col">Características</th><th scope="col">Ventajas</th><th scope="col">Desventajas</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Local</th>
+                <td>Historial en una sola computadora.</td>
+                <td>Fácil de iniciar y no necesita red.</td>
+                <td>Sin colaboración integrada; la pérdida del equipo puede comprometer el historial.</td>
+              </tr>
+              <tr>
+                <th scope="row">Centralizado</th>
+                <td>Un servidor conserva la historia compartida; los clientes usan una copia de trabajo.</td>
+                <td>Permisos y estado común más simples de administrar.</td>
+                <td>Dependencia de la red y del servidor para operaciones centrales.</td>
+              </tr>
+              <tr>
+                <th scope="row">Distribuido</th>
+                <td>Cada clon conserva la historia completa del proyecto.</td>
+                <td>Trabajo sin conexión, operaciones locales rápidas y ramas flexibles.</td>
+                <td>Puede requerir más espacio y una curva de aprendizaje mayor.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="lesson" id="cv-funcionamiento" data-searchable>
+        <h3>Flujo de trabajo con Git</h3>
+        <p>Git organiza los cambios en tres áreas locales y permite sincronizarlos con un remoto opcional. El remoto es útil para compartir y respaldar, pero no es necesario para crear commits locales.</p>
+        <ol class="flow" aria-label="Flujo de cambios de Git">
+          <li><strong>Directorio de trabajo</strong><span>Editas los archivos del proyecto.</span></li>
+          <li class="flow-command"><code>git add</code><span>Preparar los cambios</span></li>
+          <li><strong>Área de preparación</strong><span>Seleccionas qué incluir en el próximo commit.</span></li>
+          <li class="flow-command"><code>git commit</code><span>Guardar una versión</span></li>
+          <li><strong>Repositorio local</strong><span>Se incorpora el commit al historial local.</span></li>
+          <li class="flow-command"><code>git push</code><span>Sincronizar con un remoto</span></li>
+          <li><strong>Repositorio remoto</strong><span>Historial compartido alojado en un servidor.</span></li>
+        </ol>
+        <dl class="term-list">
+          <dt>Rama (branch)</dt><dd>Línea de trabajo independiente para desarrollar una función o corrección.</dd>
+          <dt>Merge</dt><dd>Integración de los cambios de una rama en otra; si hay conflictos, deben resolverse.</dd>
+          <dt>Pull</dt><dd>Obtiene cambios del remoto e integra los cambios según el comando empleado y la configuración.</dd>
+        </dl>
+      </article>
+
+      <article class="lesson" id="cv-rastreo" data-searchable>
+        <h3>Rastreo y gestión de cambios</h3>
+        <ul class="feature-list">
+          <li><code>git log</code> consulta commits, autores y mensajes.</li>
+          <li><code>git diff</code> compara cambios entre archivos, commits o áreas de trabajo.</li>
+          <li><code>git blame</code> muestra el commit asociado a cada línea de un archivo.</li>
+          <li>Las <strong>ramas</strong> aíslan el trabajo y los <strong>tags</strong> identifican puntos importantes, como una versión publicada.</li>
+          <li>Una <strong>pull request</strong> (o solicitud de integración) permite revisar y conversar sobre cambios antes de incorporarlos; es una función de plataformas de alojamiento, no un comando propio de Git.</li>
+        </ul>
+        <details class="faq-item">
+          <summary>¿Es lo mismo Git que una plataforma de alojamiento?</summary>
+          <p>No. Git es el sistema distribuido que gestiona versiones. Una plataforma de alojamiento puede guardar repositorios Git y ofrecer funciones adicionales, como revisión de cambios y seguimiento de tareas.</p>
+        </details>
+      </article>
+
+      <article class="lesson" id="cv-ejemplos" data-searchable>
+        <h3>Ejemplos prácticos con Git</h3>
+        <p>Este ciclo inicia un repositorio, prepara un cambio, lo guarda y consulta el historial. Para clonar un proyecto existente, reemplaza el marcador por la dirección que te proporcione tu equipo.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Terminal · ciclo básico</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code># Configurar identidad una sola vez en el equipo
+git config --global user.name "Tu Nombre"
+git config --global user.email "tu-correo"
+
+# Crear un repositorio o clonar uno existente
+git init
+git clone &lt;URL-del-repositorio&gt;
+
+# Revisar, preparar y guardar cambios
+git status
+git add archivo.js
+git commit -m "Agrega una función"
+
+# Crear y cambiar de rama
+git switch -c nueva-funcion
+git switch main
+git merge nueva-funcion
+
+# Consultar historial y diferencias
+git log --oneline
+git diff</code></pre>
+        </div>
+        <p>Cuando se configura un remoto y existe permiso para publicar, <code>git push</code> envía los commits locales. No se debe ejecutar en un remoto desconocido o sin revisar su destino.</p>
+      </article>
+
+      <article class="lesson video-lesson" id="cv-video" data-searchable>
+        <h3>Video recomendado: Git paso a paso</h3>
+        <p>Pulsa el botón para cargar el reproductor. La página no descarga nada de YouTube hasta que tú lo decides, así ahorras datos y energía. El video no se reproduce automáticamente; puedes activar los subtítulos desde el reproductor.</p>
+        <div class="video-card">
+          <div class="video-frame" data-video="RGOj5yH7evk" data-title="Video educativo sobre Git y control de versiones">
+            <button class="video-play" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              <span>Cargar reproductor del video</span>
+            </button>
+          </div>
+          <p class="video-msg" aria-live="polite"></p>
+          <a class="video-link" href="#" target="_blank" rel="noopener noreferrer" hidden>Ver en YouTube (se abre en otra pestaña)</a>
+        </div>
+      </article>
+
+      <article class="lesson" id="cv-faq" data-searchable>
+        <h3>Preguntas frecuentes</h3>
+        <details class="faq-item">
+          <summary>¿Cada cuánto conviene crear un commit?</summary>
+          <p>Cuando existe un conjunto pequeño y coherente de cambios que se puede describir con claridad. Los commits frecuentes y enfocados facilitan la revisión y la búsqueda de errores.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Un commit reemplaza una copia de seguridad?</summary>
+          <p>No completamente. Un commit protege el historial local, pero una falla del dispositivo aún podría perderlo. Sincronizar con un remoto de confianza y mantener respaldos sigue siendo recomendable.</p>
+        </details>
+      </article>
+
+      <article class="lesson quiz-card" id="quiz-versiones">
+        <h3>Mini quiz: control de versiones</h3>
+        <p>Selecciona una respuesta por pregunta y revisa tu puntaje.</p>
+        <form class="quiz-form" data-quiz data-quiz-key="tutorial-quiz-versiones">
+          <fieldset data-answer="b">
+            <legend>1. ¿Qué área reúne los cambios seleccionados antes del commit?</legend>
+            <label><input type="radio" name="q1" value="a" required> El directorio remoto</label>
+            <label><input type="radio" name="q1" value="b"> El área de preparación (staging)</label>
+            <label><input type="radio" name="q1" value="c"> La configuración global</label>
+          </fieldset>
+          <fieldset data-answer="a">
+            <legend>2. ¿Qué contiene normalmente un clon distribuido?</legend>
+            <label><input type="radio" name="q2" value="a" required> Una copia completa del historial</label>
+            <label><input type="radio" name="q2" value="b"> Solo el último archivo publicado</label>
+            <label><input type="radio" name="q2" value="c"> Únicamente los cambios sin confirmar</label>
+          </fieldset>
+          <fieldset data-answer="c">
+            <legend>3. ¿Para qué se usa principalmente <code>git diff</code>?</legend>
+            <label><input type="radio" name="q3" value="a" required> Crear un repositorio remoto</label>
+            <label><input type="radio" name="q3" value="b"> Cambiar el nombre de una rama</label>
+            <label><input type="radio" name="q3" value="c"> Comparar modificaciones</label>
+          </fieldset>
+          <button class="primary-button" type="submit">Revisar respuestas</button>
+          <p class="quiz-result" aria-live="polite"></p>
+        </form>
+      </article>
+      <nav class="topic-nav" aria-label="Navegar entre temas">
+        <a class="topic-nav-link topic-nav-next" href="#persistencia"><span>Siguiente tema</span><strong>Persistencia y acceso a datos →</strong></a>
+      </nav>
+    </section>
+
+    <section class="topic-section reveal" id="persistencia" data-topic="datos" aria-labelledby="persistencia-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>02</span><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v7c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12v7c0 1.7 3.6 3 8 3s8-1.3 8-3v-7"/></svg></span>
+        <div>
+          <p class="eyebrow">Tema dos</p>
+          <h2 id="persistencia-title">Persistencia y acceso a datos</h2>
+        </div>
+      </div>
+      <div class="learning-goals">
+          <strong>Al terminar este módulo podrás:</strong>
+          <span>comparar opciones de persistencia, describir mecanismos de acceso y explicar un flujo de autenticación con tokens.</span>
+      </div>
+
+      <article class="lesson" id="pd-definicion" data-searchable>
+        <h3>Definición y características</h3>
+        <p>La <strong>persistencia</strong> permite conservar información después de que una aplicación se cierra. El <strong>acceso a datos</strong> comprende las operaciones para guardar, consultar, modificar y eliminar esa información. A diferencia de la memoria RAM, el almacenamiento persistente conserva los datos más allá de la ejecución actual.</p>
+        <div class="card-grid">
+          <section class="info-card"><h4>Durabilidad e integridad</h4><p>Los datos deben sobrevivir al cierre y mantenerse completos y coherentes, incluso ante operaciones concurrentes o fallos.</p></section>
+          <section class="info-card"><h4>Disponibilidad y seguridad</h4><p>La información debe poder consultarse cuando se requiere y protegerse con permisos y controles apropiados.</p></section>
+          <section class="info-card"><h4>Rendimiento y sincronización</h4><p>El acceso debe ajustarse a los recursos móviles; los cambios locales y remotos pueden sincronizarse cuando hay conexión.</p></section>
+        </div>
+      </article>
+
+      <article class="lesson" id="pd-formas" data-searchable>
+        <h3>Formas de persistencia en dispositivos móviles</h3>
+        <div class="card-grid">
+          <section class="info-card"><h4>Archivos y preferencias</h4><p>Guardan datos como texto, JSON, XML, imágenes o documentos. El almacenamiento clave-valor (por ejemplo, preferencias de plataforma) es apropiado para opciones simples, como idioma o tema; no para secretos sin protección ni grandes conjuntos relacionados.</p><p><strong>Útil para:</strong> preferencias, caché y documentos.</p></section>
+          <section class="info-card"><h4>Bases de datos locales</h4><p>Organizan datos estructurados en el dispositivo y permiten consultas y transacciones. SQLite es una base de datos relacional integrada en muchas plataformas; capas como Room proporcionan herramientas adicionales sobre SQLite.</p><p><strong>Útil para:</strong> tareas, historial y funciones sin conexión.</p></section>
+          <section class="info-card"><h4>Servicios y datos remotos</h4><p>La app se comunica por una API con un servidor que autentica solicitudes y administra los datos compartidos. REST suele transportar recursos como JSON mediante HTTP; GraphQL permite solicitar campos específicos. Firebase ofrece varios servicios administrados, no un único tipo de base de datos.</p><p><strong>Útil para:</strong> datos compartidos y sincronización entre dispositivos.</p></section>
+        </div>
+        <details class="faq-item">
+          <summary>¿Qué opción funciona sin conexión?</summary>
+          <p>Los archivos y bases de datos locales permiten trabajar sin red. Una aplicación también puede combinar almacenamiento local y remoto y sincronizar cambios más tarde, siempre que defina cómo resolver conflictos y conservar la consistencia.</p>
+        </details>
+      </article>
+
+      <article class="lesson" id="pd-tipos-datos" data-searchable>
+        <h3>Tipos de datos según la forma de persistencia</h3>
+        <div class="table-wrap" tabindex="0" aria-label="Tabla de tipos de datos; desplázate horizontalmente si es necesario">
+          <table>
+            <caption>Ejemplos de información y almacenamiento adecuado</caption>
+            <thead><tr><th scope="col">Forma</th><th scope="col">Datos habituales</th><th scope="col">Ejemplo</th><th scope="col">Consideración</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Clave-valor</th><td>Texto breve, números y valores booleanos.</td><td>Idioma seleccionado o preferencia de tema.</td><td>No es un almacén seguro para credenciales.</td></tr>
+              <tr><th scope="row">Archivos</th><td>Texto, JSON, XML, imágenes, audio, video y documentos.</td><td>Documento descargado o archivo de configuración.</td><td>Valida formato, tamaño y permisos.</td></tr>
+              <tr><th scope="row">Base local</th><td>Registros estructurados, relaciones, fechas, números y blobs.</td><td>Tareas o productos que deben consultarse localmente.</td><td>Usa transacciones y consultas parametrizadas.</td></tr>
+              <tr><th scope="row">Servicio remoto</th><td>Recursos sincronizados, perfiles y datos compartidos.</td><td>Publicaciones consultadas desde varios dispositivos.</td><td>Requiere conexión, autenticación y manejo de errores.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="lesson" id="pd-acceso" data-searchable>
+        <h3>Mecanismos de acceso a medios persistentes</h3>
+        <h4>Bibliotecas de clases</h4>
+        <p>Las APIs de cada plataforma abstraen operaciones del sistema de archivos y preferencias. En Android se utilizan APIs de archivos y DataStore o preferencias; iOS ofrece FileManager y UserDefaults. Las credenciales y tokens deben guardarse en almacenes seguros del sistema, no en preferencias ordinarias.</p>
+        <h4>Clases de SQLite</h4>
+        <p>SQLite permite ejecutar consultas SQL en una base local. Usa parámetros en vez de concatenar texto para evitar errores de formato y ataques de inyección.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Ejemplo · SQL parametrizado</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>-- Crear una tabla sencilla
+CREATE TABLE IF NOT EXISTS mascotas (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  especie TEXT
+);
+
+-- Insertar valores con parámetros enlazados desde la API
+INSERT INTO mascotas (nombre, especie)
+VALUES (?, ?);
+
+-- Consultar los registros
+SELECT id, nombre, especie FROM mascotas;</code></pre>
+        </div>
+        <h4>Mapeo relacional de objetos (ORM)</h4>
+        <p>Un ORM conecta entidades del código con tablas de una base relacional. Reduce parte del SQL repetitivo y puede ofrecer migraciones y comprobación de tipos, pero no elimina la necesidad de entender consultas, transacciones y el diseño de datos. Room es una capa de persistencia de Android basada en SQLite.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Ejemplo conceptual · Kotlin y Room</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>@Entity(tableName = "mascotas")
+data class Mascota(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val nombre: String,
+    val especie: String
+)
+
+@Dao
+interface MascotaDao {
+    @Insert
+    suspend fun insertar(mascota: Mascota)
+
+    @Query("SELECT * FROM mascotas")
+    suspend fun obtenerTodas(): List&lt;Mascota&gt;
+}</code></pre>
+        </div>
+      </article>
+
+      <article class="lesson" id="pd-autenticacion" data-searchable>
+        <h3>Autenticación y consumo de servicios web</h3>
+        <p>La autenticación comprueba quién realiza una solicitud. Un flujo habitual con una API usa HTTPS y un token de acceso de duración limitada. El servidor valida las credenciales; la app protege el token en el almacén seguro del sistema y lo envía en solicitudes autorizadas. Una respuesta 401 indica que la solicitud no está autenticada o que la credencial ya no es válida.</p>
+        <ol class="numbered-steps">
+          <li>La persona introduce sus credenciales en la aplicación.</li>
+          <li>La app las envía al endpoint de inicio de sesión usando HTTPS.</li>
+          <li>El servidor valida las credenciales y, si son correctas, emite un token.</li>
+          <li>La app guarda el token de forma segura; no guarda la contraseña.</li>
+          <li>Las solicitudes protegidas incluyen el token en el encabezado <code>Authorization</code>.</li>
+          <li>El servidor valida el token y devuelve los datos o un error adecuado.</li>
+          <li>La app maneja expiración, errores de red y estados de carga sin exponer secretos.</li>
+        </ol>
+        <p>El siguiente fragmento es una plantilla ilustrativa: sustituye las rutas relativas por las rutas de una API de confianza. No realiza solicitudes al abrir este tutorial.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Ejemplo · Fetch y token</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>async function iniciarSesion(correo, contrasena) {
+  const respuesta = await fetch('/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ correo, contrasena })
+  });
+
+  if (!respuesta.ok) {
+    throw new Error('No se pudo iniciar sesión.');
+  }
+
+  const datos = await respuesta.json();
+  return datos.token;
+}
+
+async function obtenerDatos(token) {
+  const respuesta = await fetch('/datos', {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (!respuesta.ok) {
+    throw new Error('No se pudieron cargar los datos.');
+  }
+
+  return respuesta.json();
+}</code></pre>
+        </div>
+        <details class="faq-item">
+          <summary>¿Puedo guardar el token en localStorage?</summary>
+          <p>Para aplicaciones móviles nativas, utiliza el almacén seguro de la plataforma. En web, localStorage no es adecuado para secretos de autenticación frente a ataques de script; la estrategia debe elegirse según el modelo de seguridad de la aplicación.</p>
+        </details>
+      </article>
+
+      <article class="lesson" id="pd-ejemplos" data-searchable>
+        <h3>Demo interactiva: persistencia con localStorage</h3>
+        <p>Escribe una nota y guárdala. La demo conserva el texto en el navegador para mostrar cómo funciona el almacenamiento clave-valor. No introduzcas contraseñas ni información sensible.</p>
+        <form class="note-demo" id="noteForm">
+          <label for="noteInput">Nota de ejemplo</label>
+          <input id="noteInput" name="nota" type="text" maxlength="160" placeholder="Escribe una nota breve">
+          <div class="button-row">
+            <button class="primary-button" type="submit">Guardar nota</button>
+            <button class="secondary-button" id="deleteNote" type="button">Borrar nota</button>
+          </div>
+          <p class="demo-message" id="noteMessage" aria-live="polite">La nota guardada aparecerá aquí.</p>
+        </form>
+        <h4>Casos de uso</h4>
+        <ul class="feature-list">
+          <li>Preferencias de tema e idioma: almacenamiento simple de clave-valor.</li>
+          <li>Lista de tareas que debe consultarse sin conexión: base de datos local.</li>
+          <li>Fotografías o documentos: archivos con permisos y límites de almacenamiento apropiados.</li>
+          <li>Publicaciones compartidas entre dispositivos: API y almacenamiento remoto con autenticación.</li>
+        </ul>
+      </article>
+
+      <article class="lesson video-lesson" id="pd-video" data-searchable>
+        <h3>Recursos de muestra: persistencia y bases de datos</h3>
+        <p>Consulta documentación oficial y una colección de videos educativos de Android Developers. Los recursos externos solo se abren cuando eliges un enlace.</p>
+        <div class="resource-links">
+          <a href="https://developer.android.com/training/data-storage" target="_blank" rel="noopener noreferrer">Almacenamiento de datos en Android <span aria-hidden="true">↗</span></a>
+          <a href="https://developer.android.com/training/data-storage/room" target="_blank" rel="noopener noreferrer">Guía oficial de Room <span aria-hidden="true">↗</span></a>
+          <a href="https://www.youtube.com/@AndroidDevelopers" target="_blank" rel="noopener noreferrer">Videos de Android Developers <span aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <article class="lesson" id="pd-faq" data-searchable>
+        <h3>Preguntas frecuentes</h3>
+        <details class="faq-item">
+          <summary>¿Qué datos deberían guardarse localmente?</summary>
+          <p>Los necesarios para que la experiencia sea rápida o funcione sin conexión, con una política de retención clara. Evita almacenar datos personales innecesarios y protege la información sensible.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Qué hacer cuando los datos locales y remotos difieren?</summary>
+          <p>Define una estrategia de sincronización explícita: por ejemplo, resolver conflictos por versión, registrar operaciones pendientes o pedir decisión a la persona usuaria. No existe una regla única adecuada para todas las aplicaciones.</p>
+        </details>
+      </article>
+
+      <article class="lesson quiz-card" id="quiz-persistencia">
+        <h3>Mini quiz: persistencia y acceso a datos</h3>
+        <p>Selecciona una respuesta por pregunta y revisa tu puntaje.</p>
+        <form class="quiz-form" data-quiz data-quiz-key="tutorial-quiz-persistencia">
+          <fieldset data-answer="a">
+            <legend>1. ¿Qué opción suele ser adecuada para preferencias simples?</legend>
+            <label><input type="radio" name="p1" value="a" required> Almacenamiento clave-valor</label>
+            <label><input type="radio" name="p1" value="b"> Una tabla remota sin autenticación</label>
+            <label><input type="radio" name="p1" value="c"> Una contraseña en un archivo de texto</label>
+          </fieldset>
+          <fieldset data-answer="c">
+            <legend>2. ¿Qué práctica ayuda a evitar inyección SQL?</legend>
+            <label><input type="radio" name="p2" value="a" required> Concatenar la entrada del usuario en la consulta</label>
+            <label><input type="radio" name="p2" value="b"> Desactivar las restricciones de la tabla</label>
+            <label><input type="radio" name="p2" value="c"> Enlazar valores mediante parámetros</label>
+          </fieldset>
+          <fieldset data-answer="b">
+            <legend>3. ¿Dónde debería guardar una app móvil un token sensible?</legend>
+            <label><input type="radio" name="p3" value="a" required> En una preferencia pública</label>
+            <label><input type="radio" name="p3" value="b"> En el almacén seguro de la plataforma</label>
+            <label><input type="radio" name="p3" value="c"> En un comentario del código</label>
+          </fieldset>
+          <button class="primary-button" type="submit">Revisar respuestas</button>
+          <p class="quiz-result" aria-live="polite"></p>
+        </form>
+      </article>
+      <nav class="topic-nav" aria-label="Navegar entre temas">
+        <a class="topic-nav-link topic-nav-previous" href="#control-versiones"><span>Tema anterior</span><strong>← Control de versiones</strong></a>
+        <a class="topic-nav-link topic-nav-next" href="#sensores"><span>Siguiente tema</span><strong>Gestión de sensores →</strong></a>
+      </nav>
+    </section>
+
+    <section class="topic-section reveal" id="sensores" data-topic="sensores" aria-labelledby="sensores-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>03</span><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="7"/><path d="m8 12 2.5 2.5L16 9"/></svg></span>
+        <div><p class="eyebrow">Tema tres</p><h2 id="sensores-title">Gestión de sensores</h2></div>
+      </div>
+      <div class="learning-goals"><strong>Al terminar este módulo podrás:</strong><span>reconocer sensores móviles y describir su habilitación, lectura, procesamiento y uso responsable en una app.</span></div>
+
+      <article class="lesson" id="sen-definicion" data-searchable>
+        <h3>Definición y tipos de sensores</h3>
+        <p>Un <strong>sensor</strong> es un componente físico o lógico que mide una propiedad del entorno o del dispositivo y entrega lecturas que el sistema operativo pone a disposición de las aplicaciones. Algunos sensores son piezas de hardware; otros, como la orientación o la ubicación, se calculan combinando varias fuentes. La presencia y precisión dependen del modelo del dispositivo.</p>
+        <div class="table-wrap" tabindex="0" aria-label="Tipos de sensores móviles; desplázate horizontalmente si hace falta">
+          <table>
+            <caption>Ejemplos de sensores y usos en aplicaciones móviles</caption>
+            <thead><tr><th scope="col">Sensor o fuente</th><th scope="col">Qué mide o estima</th><th scope="col">Ejemplo de uso</th><th scope="col">Consideración</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Acelerómetro</th><td>Aceleración en los ejes del dispositivo, incluida la gravedad.</td><td>Detectar movimiento o contar pasos con algoritmos adecuados.</td><td>El ruido y la orientación afectan la lectura.</td></tr>
+              <tr><th scope="row">Giroscopio</th><td>Velocidad angular y rotación.</td><td>Control de cámara o movimiento en un juego.</td><td>Puede acumular deriva; suele combinarse con otros sensores.</td></tr>
+              <tr><th scope="row">Magnetómetro</th><td>Campo magnético.</td><td>Apoyar una brújula digital.</td><td>Interferencias magnéticas alteran las mediciones.</td></tr>
+              <tr><th scope="row">Proximidad y luz</th><td>Presencia cercana a la pantalla e intensidad de luz.</td><td>Apagar la pantalla durante una llamada o ajustar brillo.</td><td>Disponibilidad y rango varían por dispositivo.</td></tr>
+              <tr><th scope="row">Barómetro</th><td>Presión atmosférica.</td><td>Estimación complementaria de cambios de altitud.</td><td>No reemplaza una medición precisa de ubicación.</td></tr>
+              <tr><th scope="row">Ubicación (GNSS)</th><td>Posición estimada por satélites y, según el sistema, otras fuentes.</td><td>Mapa o navegación con permiso de ubicación.</td><td>Requiere explicar el permiso y el uso de datos personales.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Privacidad:</strong> solicita solo los permisos necesarios, explica el propósito antes de pedir acceso y detén lecturas cuando ya no se necesitan. No todos los sensores requieren permiso de usuario, pero ubicación y actividad pueden estar protegidas por permisos específicos de la plataforma.</p>
+      </article>
+
+      <article class="lesson" id="sen-gestion" data-searchable>
+        <h3>Proceso de gestión: habilitación, obtención y procesamiento</h3>
+        <ol class="numbered-steps">
+          <li><strong>Habilitar:</strong> comprobar si el sensor existe, solicitar permisos cuando corresponda y pedir al usuario que active servicios del sistema si son necesarios.</li>
+          <li><strong>Obtener información:</strong> suscribirse a lecturas con una frecuencia apropiada y conservar la marca temporal y las unidades del dato.</li>
+          <li><strong>Procesar:</strong> filtrar ruido, calibrar o combinar lecturas si el caso lo requiere; convertirlas en una decisión de aplicación.</li>
+          <li><strong>Finalizar:</strong> detener la escucha cuando la pantalla o tarea deja de necesitarla para cuidar batería y privacidad.</li>
+        </ol>
+        <ol class="flow" aria-label="Flujo de administración de sensores">
+          <li><strong>Comprobar</strong><span>Sensor y permiso disponibles</span></li>
+          <li class="flow-command"><code>registrar</code><span>Suscribir un listener</span></li>
+          <li><strong>Leer</strong><span>Valores y marca temporal</span></li>
+          <li class="flow-command"><code>procesar</code><span>Filtrar o interpretar</span></li>
+          <li><strong>Actuar</strong><span>Actualizar una función de la app</span></li>
+          <li class="flow-command"><code>detener</code><span>Cancelar al salir del ciclo activo</span></li>
+        </ol>
+      </article>
+
+      <article class="lesson" id="sen-ejemplo" data-searchable>
+        <h3>Ejemplo de aplicación: lectura de acelerómetro en Android</h3>
+        <p>Un juego puede inclinar un objeto con la aceleración en los ejes X e Y. El siguiente ejemplo es ilustrativo: se debe ejecutar desde el ciclo de vida de una pantalla y confirmar que el sensor existe. Para reducir consumo, se registra al reanudar la pantalla y se cancela al pausarla.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Kotlin · Android SensorManager</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>private val sensorManager by lazy {
+    getSystemService(SENSOR_SERVICE) as SensorManager
+}
+private val acelerometro by lazy {
+    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+}
+
+private val listener = object : SensorEventListener {
+    override fun onSensorChanged(event: SensorEvent) {
+        val x = event.values[0]
+        val y = event.values[1]
+        // Actualizar el movimiento con valores filtrados si hace falta.
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
+}
+
+override fun onResume() {
+    super.onResume()
+    acelerometro?.let {
+        sensorManager.registerListener(
+            listener, it, SensorManager.SENSOR_DELAY_GAME
+        )
+    }
+}
+
+override fun onPause() {
+    sensorManager.unregisterListener(listener)
+    super.onPause()
+}</code></pre>
+        </div>
+        <p>La conversión de aceleración en una acción requiere definir umbrales y suavizado con pruebas reales; no conviene tratar una sola lectura como una decisión definitiva.</p>
+      </article>
+
+      <article class="lesson quiz-card" id="quiz-sensores">
+        <h3>Mini quiz: gestión de sensores</h3>
+        <form class="quiz-form" data-quiz data-quiz-key="tutorial-quiz-sensores">
+          <fieldset data-answer="b"><legend>¿Qué práctica ayuda a ahorrar batería al leer sensores?</legend>
+            <label><input type="radio" name="s1" value="a" required> Mantener todas las suscripciones activas siempre</label>
+            <label><input type="radio" name="s1" value="b"> Detener el listener cuando ya no se necesita</label>
+            <label><input type="radio" name="s1" value="c"> Solicitar la frecuencia más alta en cualquier caso</label>
+          </fieldset>
+          <button class="primary-button" type="submit">Revisar respuesta</button><p class="quiz-result" aria-live="polite"></p>
+        </form>
+      </article>
+      <nav class="topic-nav" aria-label="Navegar entre temas">
+        <a class="topic-nav-link topic-nav-previous" href="#persistencia"><span>Tema anterior</span><strong>← Persistencia y datos</strong></a>
+        <a class="topic-nav-link topic-nav-next" href="#multimedia"><span>Siguiente tema</span><strong>Recursos multimedia →</strong></a>
+      </nav>
+    </section>
+
+    <section class="topic-section reveal" id="multimedia" data-topic="multimedia" aria-labelledby="multimedia-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>04</span><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="10" r="1.5"/><path d="m21 15-5-5L5 19M13 5l2 4 3-2"/></svg></span>
+        <div><p class="eyebrow">Tema cuatro</p><h2 id="multimedia-title">Uso de recursos multimedia</h2></div>
+      </div>
+      <div class="learning-goals"><strong>Al terminar este módulo podrás:</strong><span>distinguir tipos de medios, ubicar archivos en un proyecto y reconocer los componentes que los cargan, decodifican y presentan.</span></div>
+
+      <article class="lesson" id="mm-definicion" data-searchable>
+        <h3>Definición y tipos de recursos multimedia</h3>
+        <p>Los <strong>recursos multimedia</strong> son contenidos visuales, sonoros o animados que complementan la interacción de una aplicación. Deben elegirse en formatos adecuados a la plataforma, con dimensiones y calidad suficientes sin descargar más datos o consumir más memoria de la necesaria.</p>
+        <div class="table-wrap" tabindex="0" aria-label="Tipos de recursos multimedia; desplázate horizontalmente si hace falta">
+          <table>
+            <caption>Medios habituales en aplicaciones móviles</caption>
+            <thead><tr><th scope="col">Tipo</th><th scope="col">Formatos o tecnologías</th><th scope="col">Ejemplo de aplicación</th><th scope="col">Cuidado de implementación</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Imágenes</th><td>JPEG, PNG, WebP, SVG para gráficos vectoriales compatibles.</td><td>Fotografía de perfil, ilustraciones e iconos.</td><td>Redimensionar y comprimir; cargar versiones apropiadas a la pantalla.</td></tr>
+              <tr><th scope="row">Audio</th><td>AAC, MP3, OGG u otros formatos soportados por la plataforma.</td><td>Voz, sonido de confirmación o narración accesible.</td><td>Gestionar foco de audio, volumen y ciclo de vida del reproductor.</td></tr>
+              <tr><th scope="row">Video</th><td>Contenedor y códec admitidos por el dispositivo; por ejemplo MP4 con H.264.</td><td>Lección breve o evidencia de una actividad.</td><td>Reproducción bajo demanda, subtítulos, red adaptable y liberación de recursos.</td></tr>
+              <tr><th scope="row">Animaciones</th><td>Animaciones nativas, vectoriales o secuencias ligeras.</td><td>Transición que indica que una acción concluyó.</td><td>Evitar movimiento innecesario y respetar reducir movimiento.</td></tr>
+              <tr><th scope="row">Visuales dinámicos</th><td>Canvas, gráficos, mapas y componentes de interfaz.</td><td>Gráfica en tiempo real de sensores o progreso.</td><td>Actualizar solo cuando cambian los datos y mantener contraste/alternativas.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="lesson" id="mm-proyecto" data-searchable>
+        <h3>Elementos del proyecto donde se almacenan los recursos</h3>
+        <p>Los recursos empaquetados con la aplicación se organizan en carpetas específicas de cada plataforma. Los recursos descargados por el usuario se almacenan aparte, de acuerdo con permisos, disponibilidad y política de caché.</p>
+        <div class="card-grid">
+          <section class="info-card"><h4>Android</h4><p><code>app/src/main/res/drawable</code> contiene imágenes y gráficos; <code>res/mipmap</code> se usa para iconos de lanzador; <code>res/raw</code> permite incluir archivos sin procesar. <code>src/main/assets</code> conserva archivos que la aplicación lee mediante AssetManager.</p></section>
+          <section class="info-card"><h4>iOS</h4><p>Los catálogos <code>Assets.xcassets</code> organizan imágenes, colores e iconos en variantes; otros recursos se incorporan al bundle del proyecto. Los permisos de cámara, micrófono o biblioteca se describen según el uso de la app.</p></section>
+          <section class="info-card"><h4>Contenido remoto o del usuario</h4><p>La caché y archivos generados deben tener una ubicación y política de borrado claras. No se debe incorporar contenido pesado al paquete si puede solicitarse de forma eficiente cuando el usuario lo necesite.</p></section>
+        </div>
+      </article>
+
+      <article class="lesson" id="mm-componentes" data-searchable>
+        <h3>Componentes de software y ejemplo</h3>
+        <p>Una función multimedia suele combinar varios elementos: una API de recursos, un decodificador adecuado, un componente de presentación y controles del ciclo de vida. Por ejemplo, <code>ImageView</code> presenta una imagen ya decodificada; <strong>Media3 ExoPlayer</strong> administra reproducción de audio/video en Android; <strong>AudioManager</strong> coordina volumen y foco de audio; <code>Canvas</code> o componentes declarativos dibujan visuales dinámicos. Apple proporciona APIs como <strong>AVFoundation</strong>. Cada componente debe pausarse y liberar recursos cuando corresponda.</p>
+        <ol class="flow" aria-label="Proceso de presentación de contenido multimedia">
+          <li><strong>Recurso</strong><span>Local o remoto</span></li><li class="flow-command"><code>cargar</code><span>Validar ruta y permisos</span></li>
+          <li><strong>Decodificador</strong><span>Convierte datos al formato de salida</span></li><li class="flow-command"><code>presentar</code><span>Vista o reproductor accesible</span></li>
+          <li><strong>Gestionar</strong><span>Pausa, memoria y ciclo de vida</span></li>
+        </ol>
+        <p>Ejemplo sencillo para mostrar un recurso de imagen local en una pantalla Android. El identificador se genera a partir del nombre del recurso en <code>res/drawable</code>.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Kotlin · mostrar una imagen local</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>val imagen = findViewById&lt;ImageView&gt;(R.id.imagenPortada)
+imagen.setImageResource(R.drawable.portada_tutorial)
+imagen.contentDescription = "Portada del tutorial de desarrollo móvil"</code></pre>
+        </div>
+        <p>Una imagen informativa necesita descripción accesible; si es decorativa, debe marcarse como tal. Para reproducir video, evita iniciar automáticamente y ofrece controles, subtítulos y una alternativa textual.</p>
+      </article>
+
+      <article class="lesson quiz-card" id="quiz-multimedia">
+        <h3>Mini quiz: recursos multimedia</h3>
+        <form class="quiz-form" data-quiz data-quiz-key="tutorial-quiz-multimedia">
+          <fieldset data-answer="a"><legend>¿Qué práctica mejora el uso de una imagen en una app?</legend>
+            <label><input type="radio" name="m1" value="a" required> Ajustar tamaño y compresión al uso previsto</label>
+            <label><input type="radio" name="m1" value="b"> Descargar siempre la imagen de máxima resolución</label>
+            <label><input type="radio" name="m1" value="c"> Quitar la descripción aunque transmita información</label>
+          </fieldset>
+          <button class="primary-button" type="submit">Revisar respuesta</button><p class="quiz-result" aria-live="polite"></p>
+        </form>
+      </article>
+      <nav class="topic-nav" aria-label="Navegar entre temas">
+        <a class="topic-nav-link topic-nav-previous" href="#sensores"><span>Tema anterior</span><strong>← Gestión de sensores</strong></a>
+        <a class="topic-nav-link topic-nav-next" href="#servicios"><span>Siguiente tema</span><strong>Servicios y notificaciones →</strong></a>
+      </nav>
+    </section>
+
+    <section class="topic-section reveal" id="servicios" data-topic="servicios" aria-labelledby="servicios-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>05</span><svg viewBox="0 0 24 24"><path d="M12 3v18m-6-4 6 4 6-4M5 8h14M7 8v4a5 5 0 0 0 10 0V8"/><circle cx="12" cy="5" r="2"/></svg></span>
+        <div><p class="eyebrow">Tema cinco</p><h2 id="servicios-title">Servicios y notificaciones</h2></div>
+      </div>
+      <div class="learning-goals"><strong>Al terminar este módulo podrás:</strong><span>explicar tareas en segundo plano, el acceso a datos mediante proveedores, el flujo de notificaciones y el papel de la nube.</span></div>
+
+      <article class="lesson" id="sn-conceptos" data-searchable>
+        <h3>Definición y tareas en segundo plano</h3>
+        <p>Un <strong>servicio</strong> es un componente o mecanismo que permite a una aplicación realizar trabajo o exponer funciones sin depender directamente de una pantalla visible. Las <strong>tareas en segundo plano</strong> son operaciones que continúan fuera de la interacción inmediata, como sincronizar información, cargar una copia o procesar contenido. Los sistemas móviles limitan su duración y frecuencia para preservar batería, memoria y datos.</p>
+        <p>Elige el mecanismo según la tarea: trabajo diferible y reintentable se programa con APIs como WorkManager en Android; acciones breves vinculadas a una pantalla se ejecutan mientras esa pantalla está activa. No se debe asumir ejecución inmediata ni continua: el sistema puede aplazar tareas de acuerdo con restricciones de red, batería y versión del sistema.</p>
+        <div class="card-grid">
+          <section class="info-card"><h4>Trabajo programado</h4><p>Sincronización eventual con restricciones, estados de reintento y trabajo único.</p></section>
+          <section class="info-card"><h4>Servicio en primer plano</h4><p>Trabajo perceptible para el usuario, con notificación persistente y reglas específicas del sistema.</p></section>
+          <section class="info-card"><h4>Trabajo de interfaz</h4><p>Operaciones breves durante una pantalla activa; evita bloquear el hilo visual.</p></section>
+        </div>
+        <h4>Ejemplo: programar una sincronización diferible</h4>
+        <p>En Android, un trabajador implementa la operación y una solicitud define sus restricciones. WorkManager gestiona persistencia y reintentos, pero el momento exacto depende del sistema.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Kotlin · ejemplo conceptual con WorkManager</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>class SincronizarWorker(
+    appContext: Context,
+    parametros: WorkerParameters
+) : CoroutineWorker(appContext, parametros) {
+    override suspend fun doWork(): Result {
+        return try {
+            repositorio.sincronizarPendientes()
+            Result.success()
+        } catch (error: IOException) {
+            Result.retry()
+        }
+    }
+}
+
+val restricciones = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .build()
+
+val solicitud = OneTimeWorkRequestBuilder&lt;SincronizarWorker&gt;()
+    .setConstraints(restricciones)
+    .build()
+WorkManager.getInstance(context).enqueueUniqueWork(
+    "sincronizar-tareas",
+    ExistingWorkPolicy.KEEP,
+    solicitud
+)</code></pre>
+        </div>
+      </article>
+
+      <article class="lesson" id="sn-proveedores" data-searchable>
+        <h3>Proveedores de contenido</h3>
+        <p>En Android, un <strong>ContentProvider</strong> ofrece datos mediante URIs y operaciones estándar de consulta, inserción, actualización y eliminación. El cliente normalmente accede con <code>ContentResolver</code>. El proveedor puede mediar el acceso a datos de otra aplicación, definir permisos y devolver un cursor; se debe solicitar únicamente el permiso que se necesita.</p>
+        <ol class="numbered-steps">
+          <li>Definir el tipo de datos, el URI y las operaciones que se exponen.</li>
+          <li>Implementar operaciones con validación y permisos; aplicar consultas parametrizadas si se usa una base SQL.</li>
+          <li>Declarar proveedor y controles de exportación en el manifiesto según corresponda.</li>
+          <li>El cliente consulta mediante ContentResolver y cierra recursos después de usarlos.</li>
+        </ol>
+        <div class="code-block">
+          <div class="code-heading"><span>Kotlin · consulta de un proveedor del sistema</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+val columnas = arrayOf(
+    MediaStore.Images.Media._ID,
+    MediaStore.Images.Media.DISPLAY_NAME
+)
+
+contentResolver.query(uri, columnas, null, null, null)?.use { cursor ->
+    while (cursor.moveToNext()) {
+        val nombre = cursor.getString(
+            cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+        )
+        // Presentar el nombre sin exponer datos innecesarios.
+    }
+}</code></pre>
+        </div>
+        <p>Los permisos de medios dependen de la versión de Android y del alcance de acceso. Prefiere selectores del sistema cuando la aplicación solo necesita que la persona elija archivos concretos.</p>
+      </article>
+
+      <article class="lesson" id="sn-notificaciones" data-searchable>
+        <h3>Tratamiento e implementación de notificaciones</h3>
+        <p>Una notificación comunica un evento fuera de la pantalla activa; no sustituye una interfaz ni debe incluir información sensible que pueda verse en una pantalla bloqueada. En Android se crean canales de notificación en versiones modernas; desde Android 13, muchas apps deben solicitar permiso de notificaciones. En iOS se solicita autorización al usuario y se configura el contenido y la entrega con UserNotifications.</p>
+        <ol class="numbered-steps">
+          <li>Definir un evento útil y un texto breve que explique qué ocurrió.</li>
+          <li>Solicitar autorización en un contexto claro y respetar la decisión.</li>
+          <li>En Android, crear un canal con categoría e importancia apropiadas; preparar una acción segura para abrir el contenido relacionado.</li>
+          <li>En notificaciones remotas, registrar el dispositivo con el servicio y enviar desde un servidor autorizado; proteger credenciales de servidor.</li>
+          <li>Al recibir la notificación, validar datos y dirigir a una pantalla permitida; ofrecer configuración y baja cuando aplique.</li>
+        </ol>
+        <div class="code-block">
+          <div class="code-heading"><span>Kotlin · notificación local (canal creado previamente)</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>val notificacion = NotificationCompat.Builder(context, "recordatorios")
+    .setSmallIcon(R.drawable.ic_notification)
+    .setContentTitle("Recordatorio")
+    .setContentText("Hay tareas pendientes de revisar.")
+    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+    .setAutoCancel(true)
+    .build()
+
+NotificationManagerCompat.from(context).notify(42, notificacion)</code></pre>
+        </div>
+        <p>El ejemplo presupone que se creó el canal en Android 8 o posterior y que se obtuvo el permiso de notificaciones cuando la versión lo requiere. Para una acción al pulsar, agrega un PendingIntent explícito con comprobaciones de acceso apropiadas.</p>
+        <details class="faq-item"><summary>¿Una notificación remota es una tarea en segundo plano?</summary><p>No. El servicio de notificaciones entrega un mensaje al dispositivo; la app puede procesarlo o mostrarlo según el sistema, permisos y estado. El mensaje no garantiza que se ejecute cualquier trabajo extenso; para trabajo diferible se usa el programador de tareas de la plataforma.</p></details>
+      </article>
+
+      <article class="lesson" id="sn-nube" data-searchable>
+        <h3>Servicios de cómputo en la nube y flujo de trabajo</h3>
+        <p>La nube puede ofrecer APIs, bases de datos administradas, almacenamiento de objetos, autenticación, funciones bajo demanda y mensajería. Servicios como Firebase, Amazon Web Services y Microsoft Azure proporcionan distintos componentes; se seleccionan según privacidad, costos, disponibilidad, región, seguridad y portabilidad. La aplicación móvil no debe incluir claves privadas del servidor.</p>
+        <ol class="flow" aria-label="Flujo de una aplicación móvil con servicios de nube">
+          <li><strong>Aplicación</strong><span>Autentica a la persona</span></li><li class="flow-command"><code>HTTPS</code><span>Solicitud autorizada</span></li>
+          <li><strong>API / función</strong><span>Valida permisos y datos</span></li><li class="flow-command"><code>consultar</code><span>Reglas de acceso</span></li>
+          <li><strong>Datos en nube</strong><span>Base, archivos o mensajería</span></li>
+        </ol>
+        <p><strong>Ejemplo:</strong> una app de tareas guarda cambios primero en la base local para que se puedan consultar sin red; un trabajador programado los sincroniza con una API autenticada cuando hay conexión. El servidor aplica autorización y devuelve el resultado, y la aplicación resuelve posibles conflictos.</p>
+      </article>
+
+      <article class="lesson quiz-card" id="quiz-servicios">
+        <h3>Mini quiz: servicios y notificaciones</h3>
+        <form class="quiz-form" data-quiz data-quiz-key="tutorial-quiz-servicios">
+          <fieldset data-answer="c"><legend>¿Qué aporta un ContentProvider en Android?</legend>
+            <label><input type="radio" name="v1" value="a" required> Ejecuta código de interfaz de forma automática</label>
+            <label><input type="radio" name="v1" value="b"> Reemplaza el sistema de permisos</label>
+            <label><input type="radio" name="v1" value="c"> Expone datos mediante URIs y operaciones de acceso</label>
+          </fieldset>
+          <button class="primary-button" type="submit">Revisar respuesta</button><p class="quiz-result" aria-live="polite"></p>
+        </form>
+      </article>
+      <nav class="topic-nav" aria-label="Navegar entre temas">
+        <a class="topic-nav-link topic-nav-previous" href="#multimedia"><span>Tema anterior</span><strong>← Recursos multimedia</strong></a>
+        <a class="topic-nav-link topic-nav-next" href="#toolkits"><span>Siguiente tema</span><strong>Librerías y toolkits →</strong></a>
+      </nav>
+    </section>
+
+    <section class="topic-section reveal" id="toolkits" data-topic="toolkits" aria-labelledby="toolkits-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>06</span><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/><path d="m15 17 2 2 4-5"/></svg></span>
+        <div><p class="eyebrow">Tema seis</p><h2 id="toolkits-title">Librerías y toolkits para desarrollo móvil</h2></div>
+      </div>
+      <div class="learning-goals"><strong>Al terminar este módulo podrás:</strong><span>diferenciar una librería de un toolkit y comparar conjuntos de herramientas nativos y multiplataforma.</span></div>
+
+      <article class="lesson" id="tk-definiciones" data-searchable>
+        <h3>¿Qué es una librería y qué es un toolkit?</h3>
+        <p>Una <strong>librería</strong> es código reutilizable que ofrece funciones concretas; el programa la invoca cuando necesita una capacidad, como leer una base de datos o decodificar imágenes. Un <strong>toolkit</strong> es un conjunto coordinado de herramientas, APIs, bibliotecas y, en ocasiones, componentes de interfaz o compilación que facilita crear aplicaciones para una plataforma o grupo de plataformas.</p>
+        <div class="table-wrap" tabindex="0" aria-label="Comparación de librerías y toolkits; desplázate horizontalmente si hace falta">
+          <table>
+            <caption>Diferencias principales entre una librería y un toolkit</caption>
+            <thead><tr><th scope="col">Aspecto</th><th scope="col">Librería</th><th scope="col">Toolkit</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Alcance</th><td>Resuelve una función o necesidad acotada.</td><td>Agrupa componentes para varias etapas del desarrollo.</td></tr>
+              <tr><th scope="row">Uso</th><td>La aplicación llama sus APIs cuando las requiere.</td><td>Se usa el conjunto de APIs, herramientas y convenciones para construir, probar y desplegar.</td></tr>
+              <tr><th scope="row">Ejemplos</th><td>Room, CameraX, Retrofit, Coil o Media3 en Android.</td><td>Android SDK y Xcode/iOS SDK; Flutter y .NET MAUI son stacks multiplataforma con toolkits.</td></tr>
+              <tr><th scope="row">Criterio</th><td>Compatibilidad, mantenimiento, licencia, tamaño y seguridad.</td><td>Plataformas objetivo, lenguaje, interfaz nativa, rendimiento y herramientas de compilación.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="lesson" id="tk-librerias" data-searchable>
+        <h3>Librerías de funciones especializadas para apps móviles</h3>
+        <div class="card-grid">
+          <section class="info-card"><h4>Datos locales</h4><p><strong>Room</strong> ofrece entidades, DAO y comprobación de consultas sobre SQLite en Android; <strong>Core Data</strong> y <strong>SwiftData</strong> son opciones del ecosistema Apple para modelar persistencia.</p></section>
+          <section class="info-card"><h4>Cámara y medios</h4><p><strong>CameraX</strong> simplifica casos habituales de cámara en Android; <strong>AVFoundation</strong> gestiona captura y reproducción en plataformas Apple.</p></section>
+          <section class="info-card"><h4>Red y serialización</h4><p><strong>Retrofit</strong> facilita declarar clientes HTTP en Android; bibliotecas de serialización convierten modelos y formatos, mientras TLS y la validación del servidor siguen siendo indispensables.</p></section>
+          <section class="info-card"><h4>Trabajo y presentación</h4><p><strong>WorkManager</strong> agenda trabajo persistente diferible; <strong>Media3</strong> ofrece componentes de reproducción Android. Verifica mantenimiento, compatibilidad y permisos de cada dependencia.</p></section>
+        </div>
+      </article>
+
+      <article class="lesson" id="tk-comparativa" data-searchable>
+        <h3>Toolkits aplicables y sus diferencias</h3>
+        <div class="table-wrap" tabindex="0" aria-label="Comparación de toolkits móviles; desplázate horizontalmente si hace falta">
+          <table>
+            <caption>Opciones representativas de desarrollo móvil</caption>
+            <thead><tr><th scope="col">Opción</th><th scope="col">Lenguaje y enfoque</th><th scope="col">Características</th><th scope="col">Adecuada cuando</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Android SDK / Android Studio</th><td>Kotlin o Java; desarrollo nativo Android.</td><td>APIs de plataforma, emulador, depuración y componentes Jetpack/Compose.</td><td>Se requiere integración directa con Android y sus APIs.</td></tr>
+              <tr><th scope="row">iOS SDK / Xcode</th><td>Swift; desarrollo nativo Apple.</td><td>Frameworks de Apple, SwiftUI/UIKit, simulador, depurador e Instruments.</td><td>La aplicación se dirige a iPhone/iPad y busca integración con el ecosistema Apple.</td></tr>
+              <tr><th scope="row">Flutter</th><td>Dart; toolkit y framework multiplataforma.</td><td>UI declarativa, widgets propios, herramientas de compilación y recarga rápida.</td><td>Se busca compartir gran parte de la interfaz y la lógica entre plataformas.</td></tr>
+              <tr><th scope="row">React Native</th><td>JavaScript o TypeScript; framework para apps nativas.</td><td>Modelo de componentes y acceso a módulos nativos; requiere toolchain de Android/iOS.</td><td>El equipo domina JavaScript y necesita combinar código compartido con APIs nativas.</td></tr>
+              <tr><th scope="row">.NET MAUI</th><td>C# y .NET; framework multiplataforma.</td><td>Controles y proyecto compartido para Android, iOS y otras plataformas admitidas.</td><td>El equipo trabaja en .NET y quiere compartir interfaz y lógica con límites de plataforma claros.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Ninguna opción es universalmente mejor. Evalúa requisitos de rendimiento, accesibilidad, soporte de hardware, calidad de librerías, tamaño de app, experiencia del equipo y ciclo de mantenimiento.</p>
+        <ol class="flow" aria-label="Proceso para seleccionar herramientas móviles">
+          <li><strong>Requisitos</strong><span>Plataformas, hardware y accesibilidad</span></li>
+          <li class="flow-command"><code>comparar</code><span>Soporte, costo y mantenimiento</span></li>
+          <li><strong>Prototipo</strong><span>Medir rendimiento y experiencia</span></li>
+          <li class="flow-command"><code>decidir</code><span>Documentar ventajas y límites</span></li>
+          <li><strong>Actualizar</strong><span>Revisar dependencias durante el ciclo de vida</span></li>
+        </ol>
+      </article>
+
+      <article class="lesson quiz-card" id="quiz-toolkits">
+        <h3>Mini quiz: librerías y toolkits</h3>
+        <form class="quiz-form" data-quiz data-quiz-key="tutorial-quiz-toolkits">
+          <fieldset data-answer="b"><legend>¿Cuál describe mejor una librería?</legend>
+            <label><input type="radio" name="t1" value="a" required> Un sistema operativo móvil</label>
+            <label><input type="radio" name="t1" value="b"> Código reutilizable que la aplicación invoca para una función</label>
+            <label><input type="radio" name="t1" value="c"> Un formato de imagen</label>
+          </fieldset>
+          <button class="primary-button" type="submit">Revisar respuesta</button><p class="quiz-result" aria-live="polite"></p>
+        </form>
+      </article>
+      <nav class="topic-nav" aria-label="Navegar entre temas">
+        <a class="topic-nav-link topic-nav-previous" href="#servicios"><span>Tema anterior</span><strong>← Servicios y notificaciones</strong></a>
+        <a class="topic-nav-link topic-nav-next" href="#seguridad"><span>Siguiente tema</span><strong>Depuración y seguridad →</strong></a>
+      </nav>
+    </section>
+
+    <section class="topic-section reveal" id="seguridad" data-topic="seguridad" aria-labelledby="seguridad-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>07</span><svg viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 3.4 8.3 8 10 4.6-1.7 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <div><p class="eyebrow">Tema siete</p><h2 id="seguridad-title">Depuración y seguridad</h2></div>
+      </div>
+      <div class="learning-goals"><strong>Al terminar este módulo podrás:</strong><span>explicar cómo depurar fallos, reconocer herramientas del IDE móvil y aplicar controles básicos de seguridad durante todo el desarrollo.</span></div>
+
+      <article class="lesson" id="ds-conceptos" data-searchable>
+        <h3>Qué son la depuración y la seguridad</h3>
+        <p>La <strong>depuración</strong> es el proceso sistemático de reproducir, observar y corregir defectos. Incluye examinar registros, detener la ejecución con puntos de interrupción, inspeccionar variables y probar la corrección. No se limita a eliminar errores de compilación: también verifica comportamiento, rendimiento, compatibilidad y experiencia de uso.</p>
+        <p>La <strong>seguridad</strong> protege la confidencialidad, integridad y disponibilidad de la aplicación y sus datos frente a errores, abuso o acceso no autorizado. Debe incorporarse desde el diseño y mantenerse en las actualizaciones. Una app móvil debe considerar el dispositivo, la red, los servicios remotos, las dependencias y los permisos del sistema.</p>
+        <div class="card-grid">
+          <section class="info-card"><h4>Depurar para comprender</h4><p>Un diagnóstico reproducible localiza la causa raíz y evita corregir síntomas que volverían a aparecer.</p></section>
+          <section class="info-card"><h4>Proteger datos y usuarios</h4><p>Reducir permisos, proteger secretos y validar acceso limita el impacto de fallos o configuraciones incorrectas.</p></section>
+          <section class="info-card"><h4>Probar en contexto real</h4><p>Emuladores y dispositivos físicos revelan diferencias de hardware, red, batería, tamaño de pantalla y versión del sistema.</p></section>
+        </div>
+      </article>
+
+      <article class="lesson" id="ds-herramientas" data-searchable>
+        <h3>Herramientas de depuración de entornos móviles</h3>
+        <div class="table-wrap" tabindex="0" aria-label="Herramientas de depuración; desplázate horizontalmente si hace falta">
+          <table>
+            <caption>Herramientas comunes y su propósito</caption>
+            <thead><tr><th scope="col">Entorno o herramienta</th><th scope="col">Uso</th><th scope="col">Ejemplo de diagnóstico</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Android Studio: Logcat</th><td>Consultar registros del sistema y de la app por nivel, proceso y etiqueta.</td><td>Encontrar la excepción que produjo el cierre.</td></tr>
+              <tr><th scope="row">Depurador Android / LLDB</th><td>Puntos de interrupción, ejecución paso a paso, pila y variables.</td><td>Determinar por qué un objeto llegó vacío a una función.</td></tr>
+              <tr><th scope="row">Android Profiler</th><td>Analizar CPU, memoria, red y energía.</td><td>Identificar una carga repetida o una fuga de memoria.</td></tr>
+              <tr><th scope="row">Layout Inspector y emulador</th><td>Inspeccionar jerarquía visual y simular tamaños, versiones y estados.</td><td>Encontrar una vista recortada o una diferencia entre densidades.</td></tr>
+              <tr><th scope="row">Xcode: consola, LLDB e Instruments</th><td>Depurar ejecución y analizar rendimiento/memoria en plataformas Apple.</td><td>Investigar latencia, consumo o crecimiento de memoria.</td></tr>
+              <tr><th scope="row">Pruebas automatizadas</th><td>Ejecutar pruebas unitarias, de interfaz y de integración de forma repetible.</td><td>Prevenir que una corrección rompa el acceso sin conexión.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Combina registros y herramientas de inspección con pruebas; elimina o desactiva registros de desarrollo que puedan revelar identificadores, tokens, contraseñas o datos personales.</p>
+      </article>
+
+      <article class="lesson" id="ds-practicas" data-searchable>
+        <h3>Prácticas de seguridad y ejemplo</h3>
+        <ul class="feature-list">
+          <li>Solicitar permisos mínimos y explicar su propósito; permitir que la función opere sin permisos no esenciales.</li>
+          <li>Usar HTTPS, validar certificados mediante las APIs del sistema y autorizar cada operación en el servidor.</li>
+          <li>No incluir claves privadas ni credenciales de servidor en el paquete móvil; guardar tokens en el almacén seguro de la plataforma.</li>
+          <li>Validar entradas en cliente y servidor; usar consultas parametrizadas para bases de datos.</li>
+          <li>Actualizar dependencias y el SDK, revisar permisos y configuración de publicación, y probar errores y estados sin conexión.</li>
+          <li>Recolectar y conservar solo los datos necesarios; evitar mostrarlos en registros, notificaciones o analíticas no autorizadas.</li>
+        </ul>
+        <details class="faq-item"><summary>¿El modo ofuscado hace segura una aplicación?</summary><p>No por sí solo. La ofuscación puede dificultar la lectura del paquete, pero no sustituye la autorización del servidor, el almacenamiento seguro, el cifrado en tránsito ni la gestión correcta de permisos y secretos.</p></details>
+        <p>Ejemplo de registro útil para depuración: anota el tipo de fallo y un identificador de operación no sensible; nunca registres el token completo ni la contraseña.</p>
+        <div class="code-block">
+          <div class="code-heading"><span>Kotlin · registro sin secretos</span><button class="copy-button" type="button" data-copy>Copiar código</button></div>
+          <pre><code>try {
+    sincronizarTareas()
+} catch (error: IOException) {
+    Log.e("SyncWorker", "Falló la sincronización de tareas", error)
+    // Informar un estado comprensible sin incluir credenciales.
+}</code></pre>
+        </div>
+        <p>Para un marco de evaluación de seguridad móvil, consulta el estándar OWASP MASVS y las guías oficiales de seguridad de cada plataforma.</p>
+        <ol class="flow" aria-label="Ciclo de depuración segura">
+          <li><strong>Reproducir</strong><span>Registrar pasos sin datos sensibles</span></li>
+          <li class="flow-command"><code>inspeccionar</code><span>Logs, estado y permisos</span></li>
+          <li><strong>Corregir</strong><span>Resolver causa raíz</span></li>
+          <li class="flow-command"><code>probar</code><span>Verificar regresión y controles</span></li>
+          <li><strong>Revisar</strong><span>Analizar y actualizar con seguridad</span></li>
+        </ol>
+      </article>
+
+      <article class="lesson quiz-card" id="quiz-seguridad">
+        <h3>Mini quiz: depuración y seguridad</h3>
+        <form class="quiz-form" data-quiz data-quiz-key="tutorial-quiz-seguridad">
+          <fieldset data-answer="c"><legend>¿Qué no debe incluir un registro de producción?</legend>
+            <label><input type="radio" name="d1" value="a" required> El tipo general de error</label>
+            <label><input type="radio" name="d1" value="b"> Una etiqueta de componente</label>
+            <label><input type="radio" name="d1" value="c"> Contraseñas, tokens o datos personales sensibles</label>
+          </fieldset>
+          <button class="primary-button" type="submit">Revisar respuesta</button><p class="quiz-result" aria-live="polite"></p>
+        </form>
+      </article>
+      <nav class="topic-nav" aria-label="Navegar entre temas">
+        <a class="topic-nav-link topic-nav-previous" href="#toolkits"><span>Tema anterior</span><strong>← Librerías y toolkits</strong></a>
+        <a class="topic-nav-link topic-nav-next" href="#tutoriales-muestra"><span>Continuar</span><strong>Tutoriales de muestra →</strong></a>
+      </nav>
+    </section>
+
+    <section class="topic-section reveal extra-section" id="tutoriales-muestra" aria-labelledby="muestras-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>+</span><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/><circle cx="8" cy="5" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="10" cy="19" r="2"/></svg></span>
+        <div><p class="eyebrow">Practica y consulta</p><h2 id="muestras-title">Tutoriales de muestra</h2></div>
+      </div>
+      <p>Ejemplos breves y fuentes de referencia para ampliar los mismos temas del tutorial.</p>
+      <div class="sample-grid">
+        <article class="sample-card">
+          <div class="sample-art art-git" aria-hidden="true">
+            <svg viewBox="0 0 240 120"><path d="M52 22v66c0 18 42 18 42 0V38c0-18 50-18 50 0v60M53 22h1m91 16h1m-52 50h1m50 10h1"/><circle cx="53" cy="22" r="10"/><circle cx="145" cy="38" r="10"/><circle cx="94" cy="88" r="10"/><circle cx="145" cy="98" r="10"/></svg>
+          </div>
+          <p class="eyebrow">Ejemplo visual · Git</p>
+          <h3>De cambios locales al historial compartido</h3>
+          <p>Identifica dónde preparar cambios, crear commits y sincronizar una rama.</p>
+          <a class="sample-link" href="#cv-funcionamiento">Repasar el diagrama de Git <span aria-hidden="true">→</span></a>
+          <a class="sample-link" href="https://www.youtube.com/watch?v=RGOj5yH7evk" target="_blank" rel="noopener noreferrer">Video educativo de Git <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="sample-card">
+          <div class="sample-art art-data" aria-hidden="true">
+            <svg viewBox="0 0 240 120"><ellipse cx="120" cy="28" rx="56" ry="18"/><path d="M64 28v58c0 10 25 18 56 18s56-8 56-18V28M64 56c0 10 25 18 56 18s56-8 56-18"/><path d="M40 104h160"/></svg>
+          </div>
+          <p class="eyebrow">Ejemplo práctico · Datos</p>
+          <h3>Guardar y consultar información</h3>
+          <p>Contrasta almacenamiento local con una base relacional y revisa una consulta segura.</p>
+          <a class="sample-link" href="#pd-acceso">Ver el ejemplo de SQLite y Room <span aria-hidden="true">→</span></a>
+          <a class="sample-link" href="https://www.sqlite.org/quickstart.html" target="_blank" rel="noopener noreferrer">Guía rápida oficial de SQLite <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="sample-card">
+          <div class="sample-art art-api" aria-hidden="true">
+            <svg viewBox="0 0 240 120"><rect x="26" y="24" width="70" height="70" rx="12"/><rect x="144" y="24" width="70" height="70" rx="12"/><path d="M96 48h48m-48 22h48"/><path d="m132 40 12 8-12 8m12 6-12 8 12 8"/></svg>
+          </div>
+          <p class="eyebrow">Ejemplo guiado · API REST</p>
+          <h3>Autenticación y solicitudes con token</h3>
+          <p>Revisa el flujo de inicio de sesión y el encabezado Authorization en una petición.</p>
+          <a class="sample-link" href="#pd-autenticacion">Ver flujo y código de ejemplo <span aria-hidden="true">→</span></a>
+          <a class="sample-link" href="https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener noreferrer">Tutorial de Fetch en MDN <span aria-hidden="true">↗</span></a>
+        </article>
+      </div>
+      <nav class="topic-nav" aria-label="Continuar al glosario">
+        <a class="topic-nav-link topic-nav-next" href="#glosario"><span>Siguiente</span><strong>Glosario tecnológico →</strong></a>
+      </nav>
+    </section>
+
+    <section class="topic-section reveal extra-section" id="glosario" aria-labelledby="glosario-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>A–Z</span><svg viewBox="0 0 24 24"><path d="M12 3v18M6 7h12M6 17h12"/><circle cx="12" cy="7" r="3"/><circle cx="12" cy="17" r="3"/></svg></span>
+        <div><p class="eyebrow">Consulta rápida</p><h2 id="glosario-title">Glosario tecnológico</h2></div>
+      </div>
+      <p>Conceptos clave del tutorial en orden alfabético. Busca una palabra o abre cada término para leer su definición.</p>
+      <form class="glossary-search" id="glossaryForm" role="search">
+        <label for="glossaryInput">Buscar un término del glosario</label>
+        <input id="glossaryInput" type="search" placeholder="Ejemplo: commit, API, SQLite">
+      </form>
+      <p id="glossaryStatus" class="demo-message" aria-live="polite"></p>
+      <div class="glossary-grid" id="glossaryGrid">
+        <details class="glossary-term" data-term="acelerometro sensor"><summary><span aria-hidden="true">↗</span> Acelerómetro</summary><p>Sensor que mide aceleración en varios ejes y permite reconocer movimiento del dispositivo.</p></details>
+        <details class="glossary-term" data-term="api"><summary><span aria-hidden="true">⌘</span> API</summary><p>Interfaz que define cómo un programa solicita funciones o datos a otro sistema.</p></details>
+        <details class="glossary-term" data-term="autenticacion"><summary><span aria-hidden="true">◇</span> Autenticación</summary><p>Proceso para comprobar la identidad de una persona o aplicación que solicita acceso.</p></details>
+        <details class="glossary-term" data-term="base de datos"><summary><span aria-hidden="true">▤</span> Base de datos</summary><p>Conjunto organizado de información que puede consultarse y actualizarse.</p></details>
+        <details class="glossary-term" data-term="branch rama"><summary><span aria-hidden="true">⑂</span> Branch o rama</summary><p>Línea independiente de desarrollo que permite trabajar sin cambiar directamente otra rama.</p></details>
+        <details class="glossary-term" data-term="commit"><summary><span aria-hidden="true">●</span> Commit</summary><p>Registro de un conjunto coherente de cambios en el historial de un repositorio Git.</p></details>
+        <details class="glossary-term" data-term="contentprovider proveedor de contenido"><summary><span aria-hidden="true">⇄</span> ContentProvider</summary><p>Componente de Android que expone datos mediante URIs y operaciones de consulta y modificación.</p></details>
+        <details class="glossary-term" data-term="depuracion debugger"><summary><span aria-hidden="true">⌕</span> Depuración</summary><p>Proceso de reproducir, observar y corregir defectos de software.</p></details>
+        <details class="glossary-term" data-term="flutter toolkit"><summary><span aria-hidden="true">◇</span> Flutter</summary><p>Toolkit y framework de Google para crear interfaces multiplataforma con Dart.</p></details>
+        <details class="glossary-term" data-term="git"><summary><span aria-hidden="true">⌘</span> Git</summary><p>Sistema distribuido de control de versiones para registrar cambios y colaborar en proyectos.</p></details>
+        <details class="glossary-term" data-term="gnss ubicacion"><summary><span aria-hidden="true">⌖</span> GNSS</summary><p>Sistema de navegación por satélite que ayuda a estimar la ubicación de un dispositivo.</p></details>
+        <details class="glossary-term" data-term="json"><summary><span aria-hidden="true">{ }</span> JSON</summary><p>Formato textual ligero para representar e intercambiar datos estructurados.</p></details>
+        <details class="glossary-term" data-term="media3 multimedia"><summary><span aria-hidden="true">▷</span> Media3</summary><p>Conjunto de bibliotecas de Android para crear experiencias de reproducción de medios.</p></details>
+        <details class="glossary-term" data-term="notificacion"><summary><span aria-hidden="true">◉</span> Notificación</summary><p>Mensaje del sistema que informa un evento de la aplicación fuera de su pantalla activa.</p></details>
+        <details class="glossary-term" data-term="orm"><summary><span aria-hidden="true">▦</span> ORM</summary><p>Técnica o herramienta que relaciona objetos del programa con registros de una base de datos.</p></details>
+        <details class="glossary-term" data-term="pull request"><summary><span aria-hidden="true">⇄</span> Pull request</summary><p>Propuesta de integrar cambios que permite revisarlos y comentarlos en una plataforma de colaboración.</p></details>
+        <details class="glossary-term" data-term="repositorio"><summary><span aria-hidden="true">▣</span> Repositorio</summary><p>Espacio del proyecto que contiene los archivos y el historial de versiones.</p></details>
+        <details class="glossary-term" data-term="rest"><summary><span aria-hidden="true">↔</span> REST</summary><p>Estilo de diseño de servicios web que expone recursos mediante operaciones HTTP.</p></details>
+        <details class="glossary-term" data-term="sensor acelerometro giroscopio"><summary><span aria-hidden="true">⌁</span> Sensor</summary><p>Componente físico o lógico que mide o estima una propiedad del entorno o del dispositivo.</p></details>
+        <details class="glossary-term" data-term="sqlite"><summary><span aria-hidden="true">▤</span> SQLite</summary><p>Motor relacional compacto que guarda la base de datos en un archivo local.</p></details>
+        <details class="glossary-term" data-term="staging area de preparacion"><summary><span aria-hidden="true">◫</span> Staging</summary><p>Área de preparación de Git donde se seleccionan los cambios que entrarán en el siguiente commit.</p></details>
+        <details class="glossary-term" data-term="tag etiqueta"><summary><span aria-hidden="true">◇</span> Tag o etiqueta</summary><p>Referencia con nombre a un punto del historial, usada a menudo para marcar versiones.</p></details>
+        <details class="glossary-term" data-term="token"><summary><span aria-hidden="true">⌑</span> Token</summary><p>Credencial que un cliente presenta para demostrar que una solicitud está autorizada.</p></details>
+        <details class="glossary-term" data-term="toolkit"><summary><span aria-hidden="true">▦</span> Toolkit</summary><p>Conjunto coordinado de APIs, bibliotecas y herramientas para construir y probar aplicaciones.</p></details>
+        <details class="glossary-term" data-term="workmanager tarea segundo plano"><summary><span aria-hidden="true">◷</span> WorkManager</summary><p>API de Android para programar trabajo diferible que debe ejecutarse de forma persistente cuando se satisfagan sus restricciones.</p></details>
+      </div>
+    </section>
+
+    <section class="topic-section reveal extra-section" id="recursos" aria-labelledby="recursos-title">
+      <div class="topic-heading">
+        <span class="topic-number" aria-hidden="true"><span>APA</span><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5zM9 9h6m-6 4h6m-6 4h4"/></svg></span>
+        <div><p class="eyebrow">Fuentes de consulta</p><h2 id="recursos-title">Recursos complementarios y referencias</h2></div>
+      </div>
+      <p>Referencias institucionales y bibliográficas relacionadas con los siete temas. En el texto se usan nombres completos de tecnologías; consulta estas fuentes para revisar detalles que pueden cambiar entre versiones.</p>
+      <h3>Referencias (formato APA 7)</h3>
+      <ul class="references-list">
+        <li>Chacon, S., &amp; Straub, B. (2014). <cite>Pro Git</cite> (2.ª ed.). Apress. <a href="https://git-scm.com/book/es/v2" target="_blank" rel="noopener noreferrer">https://git-scm.com/book/es/v2</a></li>
+        <li>Git. (s. f.). <cite>Git reference manual</cite>. <a href="https://git-scm.com/docs" target="_blank" rel="noopener noreferrer">https://git-scm.com/docs</a></li>
+        <li>Android Developers. (s. f.). <cite>Save data in a local database using Room</cite>. <a href="https://developer.android.com/training/data-storage/room" target="_blank" rel="noopener noreferrer">https://developer.android.com/training/data-storage/room</a></li>
+        <li>SQLite. (s. f.). <cite>SQLite documentation</cite>. <a href="https://www.sqlite.org/docs.html" target="_blank" rel="noopener noreferrer">https://www.sqlite.org/docs.html</a></li>
+        <li>Android Developers. (s. f.). <cite>Overview of Android sensors</cite>. <a href="https://developer.android.com/develop/sensors-and-location/sensors/sensors_overview" target="_blank" rel="noopener noreferrer">https://developer.android.com/develop/sensors-and-location/sensors/sensors_overview</a></li>
+        <li>Apple Developer. (s. f.). <cite>Core Motion</cite>. <a href="https://developer.apple.com/documentation/coremotion" target="_blank" rel="noopener noreferrer">https://developer.apple.com/documentation/coremotion</a></li>
+        <li>Android Developers. (s. f.). <cite>App resources overview</cite>. <a href="https://developer.android.com/guide/topics/resources/providing-resources" target="_blank" rel="noopener noreferrer">https://developer.android.com/guide/topics/resources/providing-resources</a></li>
+        <li>Android Developers. (s. f.). <cite>Media3</cite>. <a href="https://developer.android.com/media/media3" target="_blank" rel="noopener noreferrer">https://developer.android.com/media/media3</a></li>
+        <li>Apple Developer. (s. f.). <cite>AVFoundation</cite>. <a href="https://developer.apple.com/av-foundation/" target="_blank" rel="noopener noreferrer">https://developer.apple.com/av-foundation/</a></li>
+        <li>Android Developers. (s. f.). <cite>Content providers</cite>. <a href="https://developer.android.com/guide/topics/providers/content-providers" target="_blank" rel="noopener noreferrer">https://developer.android.com/guide/topics/providers/content-providers</a></li>
+        <li>Android Developers. (s. f.). <cite>WorkManager</cite>. <a href="https://developer.android.com/topic/libraries/architecture/workmanager" target="_blank" rel="noopener noreferrer">https://developer.android.com/topic/libraries/architecture/workmanager</a></li>
+        <li>Android Developers. (s. f.). <cite>Notifications</cite>. <a href="https://developer.android.com/develop/ui/views/notifications" target="_blank" rel="noopener noreferrer">https://developer.android.com/develop/ui/views/notifications</a></li>
+        <li>Firebase. (s. f.). <cite>Firebase Cloud Messaging</cite>. <a href="https://firebase.google.com/docs/cloud-messaging" target="_blank" rel="noopener noreferrer">https://firebase.google.com/docs/cloud-messaging</a></li>
+        <li>Google. (s. f.). <cite>Flutter documentation</cite>. <a href="https://docs.flutter.dev/" target="_blank" rel="noopener noreferrer">https://docs.flutter.dev/</a></li>
+        <li>Meta. (s. f.). <cite>React Native documentation</cite>. <a href="https://reactnative.dev/docs/getting-started" target="_blank" rel="noopener noreferrer">https://reactnative.dev/docs/getting-started</a></li>
+        <li>Microsoft. (s. f.). <cite>.NET MAUI documentation</cite>. <a href="https://learn.microsoft.com/dotnet/maui/" target="_blank" rel="noopener noreferrer">https://learn.microsoft.com/dotnet/maui/</a></li>
+        <li>Android Developers. (s. f.). <cite>Debug your app</cite>. <a href="https://developer.android.com/studio/debug" target="_blank" rel="noopener noreferrer">https://developer.android.com/studio/debug</a></li>
+        <li>Apple Developer. (s. f.). <cite>Instruments</cite>. <a href="https://developer.apple.com/tutorials/instruments" target="_blank" rel="noopener noreferrer">https://developer.apple.com/tutorials/instruments</a></li>
+        <li>OWASP Foundation. (s. f.). <cite>Mobile Application Security Verification Standard (MASVS)</cite>. <a href="https://mas.owasp.org/MASVS/" target="_blank" rel="noopener noreferrer">https://mas.owasp.org/MASVS/</a></li>
+        <li>Mozilla. (s. f.). <cite>Using the Fetch API</cite>. MDN Web Docs. <a href="https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Using_Fetch</a></li>
+        <li>Mozilla. (s. f.). <cite>Window.localStorage</cite>. MDN Web Docs. <a href="https://developer.mozilla.org/es/docs/Web/API/Window/localStorage" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/es/docs/Web/API/Window/localStorage</a></li>
+      </ul>
+    </section>
+
+    <section class="closing-panel reveal" id="cierre" aria-labelledby="cierre-title">
+      <p class="eyebrow">Fin del recorrido</p>
+      <h2 id="cierre-title">¡Buen trabajo! Ya completaste el tutorial</h2>
+      <p>Recorriste siete áreas del desarrollo móvil: historial de código, persistencia, sensores, multimedia, servicios, herramientas de desarrollo, depuración y seguridad.</p>
+      <div class="closing-summary card-grid">
+        <p><strong>Control de versiones</strong><br>Modelos, staging, commits, ramas, comparación y colaboración.</p>
+        <p><strong>Persistencia y acceso</strong><br>Archivos, bases de datos locales, servicios web y tokens de acceso.</p>
+        <p><strong>Sensores y multimedia</strong><br>Lecturas responsables y recursos visuales, sonoros y dinámicos.</p>
+        <p><strong>Servicios y herramientas</strong><br>Trabajo en segundo plano, nube, notificaciones, librerías y toolkits.</p>
+        <p><strong>Calidad y protección</strong><br>Depuración, análisis de rendimiento y prácticas de seguridad móvil.</p>
+      </div>
+      <p class="final-score" id="finalScore" aria-live="polite">Completa los mini quizzes para ver tu puntuación total.</p>
+      <div class="hero-actions">
+        <a class="cta cta-primary" href="#inicio">Regresar al inicio</a>
+        <a class="cta cta-secondary" href="#control-versiones">Repasar los temas</a>
+        <a class="cta cta-secondary" href="#recursos">Consultar recursos</a>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p><strong>Tutorial de desarrollo móvil</strong> · Actividad: 12/11/2026</p>
+      <p>Nombre del alumno: <span class="student-placeholder">____________________________</span></p>
+      <p>Créditos: guía académica desarrollada con HTML5, CSS3 y JavaScript; fuentes complementarias en la sección de recursos.</p>
+      <p class="sustainability-note"><strong>Sitio ligero y sostenible.</strong> Usa solo HTML, CSS y JavaScript local, fuentes del sistema y recursos vectoriales simples; no carga trackers ni bibliotecas externas. Los videos de YouTube se cargan únicamente cuando pulsas el botón de reproducción, y el modo eco reduce animaciones, degradados y sombras.</p>
+      <a class="back-to-top" href="#inicio">Volver arriba ↑</a>
+    </footer>
+  </main>
+
+  <button class="back-to-top floating-top" id="backToTop" type="button" aria-label="Volver arriba" hidden>↑</button>
+  <div class="menu-scrim" id="menuScrim" hidden></div>
+</body>
+</html>
